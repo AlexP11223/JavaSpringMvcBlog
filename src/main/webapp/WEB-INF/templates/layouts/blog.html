@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+
+      layout:decorator="layouts/page">
+
+<head>
+    <title>Blog</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/blog.css" th:href="@{/css/blog.css}"/>
+</head>
+
+<body>
+
+<section layout:fragment="content">
+
+        <div class="row">
+            <section class="col-sm-2"></section>
+
+            <section class="col-sm-8 main-content" layout:fragment="mainContent">
+
+            </section>
+
+            <section class="col-sm-2">right</section>
+        </div>
+
+</section>
+
+</body>
+</html>
