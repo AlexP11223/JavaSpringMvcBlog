@@ -8,12 +8,13 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <mvc:annotation-driven />
-    <context:component-scan base-package="alexp.blog" />
-
     <!-- static resources -->
     <mvc:resources location="/images/" mapping="/images/**" />
     <mvc:resources location="/css/" mapping="/css/**" />
+    <mvc:resources location="/favicon.ico" mapping="/favicon.ico" />
+
+    <mvc:annotation-driven />
+    <context:component-scan base-package="alexp.blog" />
 
     <!-- Thymeleaf resolver, etc. -->
 
