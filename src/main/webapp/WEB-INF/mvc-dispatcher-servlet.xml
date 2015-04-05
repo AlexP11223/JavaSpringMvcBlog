@@ -38,4 +38,7 @@
         <property name="templateEngine" ref="templateEngine" />
     </bean>
 
+    <!-- view that do not require any controller logic -->
+    <mvc:view-controller path="/about" view-name="about"/>
+
 </beans>

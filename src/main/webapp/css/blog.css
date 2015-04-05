@@ -1,18 +1,14 @@
-.main-content {
-    padding-left: 30px;
-    padding-right: 30px;
+.page-header {
+    padding-bottom: 10px;
 }
 
-.fixed-fluid {
-    margin-left: 240px;
+.header-description {
+    color: #999;
 }
 
-.fluid-fixed {
-    margin-right: 240px;
-
-    margin-left:auto !important;
-}
-
-.fixed-fixed {
-    margin: 0 240px;
+.page-footer {
+    text-align: center;
+    padding: 40px 0;
+    background-color: #f9f9f9;
+    border-top: 1px solid #e5e5e5;
 }

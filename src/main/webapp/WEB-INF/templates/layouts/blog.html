@@ -2,30 +2,78 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-
-      layout:decorator="layouts/page">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
     <title>Blog</title>
+
     <link rel="stylesheet" type="text/css" href="../../../css/blog.css" th:href="@{/css/blog.css}"/>
+
+    <!-- jQuery -->
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"/>
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-<section layout:fragment="content">
+<div class="container-fluid">
 
-        <div class="row">
-            <section class="col-sm-2"></section>
+    <div class="row">
+        <header class="col-sm-8 col-sm-offset-2 page-header">
+            <h1>Blog</h1>
+            <p class="lead header-description">Cats and programming</p>
 
-            <section class="col-sm-8 main-content" layout:fragment="mainContent">
+            <div class="btn-group">
+                <a th:href="@{/posts}" role="button" class="btn btn-primary">Home</a>
+                <a th:href="@{/about}" role="button" class="btn btn-primary">About</a>
+            </div>
+        </header>
+    </div>
+
+    <div class="row">
+        <section class="col-sm-2">
+            <form>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email"/>
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Password:</label>
+                    <input type="password" class="form-control" id="pwd"/>
+                </div>
+                <div class="checkbox">
+                    <label><input type="checkbox"/> Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-default">Log in</button>
+            </form>
+         </section>
+
+        <section class="col-sm-8">
+
+            <section layout:fragment="content">
 
             </section>
+        </section>
 
-            <section class="col-sm-2">right</section>
-        </div>
+        <section class="col-sm-2">
+            <p>right</p>
+        </section>
+    </div>
+</div>
 
-</section>
+<footer class="page-footer">
+    <p>&copy; 2015 Aleksas Pantechovskis</p>
+</footer>
 
 </body>
 </html>
