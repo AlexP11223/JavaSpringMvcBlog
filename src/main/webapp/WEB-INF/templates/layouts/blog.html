@@ -2,7 +2,8 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -47,20 +48,24 @@
     <div class="row">
         <section class="col-sm-2">
             <div class="col-padding">
-                <form>
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        <input type="email" class="form-control" id="email"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="pwd">Password:</label>
-                        <input type="password" class="form-control" id="pwd"/>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox"/> Remember me</label>
-                    </div>
-                    <button type="submit" class="btn btn-default">Log in</button>
-                </form>
+
+                <div th:unless="${#authorization.expression('isAuthenticated()')}">
+                    <form th:action="@{/login}" method="post">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="pwd">Password:</label>
+                            <input type="password" class="form-control" id="pwd"/>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox"/> Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-default">Log in</button>
+                    </form>
+                </div>
+
             </div>
          </section>
 

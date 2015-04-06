@@ -23,6 +23,7 @@
         <property name="prefix" value="/WEB-INF/templates/" />
         <property name="suffix" value=".html" />
         <property name="templateMode" value="HTML5" />
+        <property name="characterEncoding" value="UTF-8" />
     </bean>
 
     <bean id="templateEngine"
@@ -31,6 +32,7 @@
         <property name="additionalDialects">
             <set>
                 <bean class="nz.net.ultraq.thymeleaf.LayoutDialect"/>
+                <bean class="org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect"/>
             </set>
         </property>
     </bean>
@@ -41,5 +43,6 @@
 
     <!-- view that do not require any controller logic -->
     <mvc:view-controller path="/about" view-name="about"/>
+    <mvc:view-controller path="/403" view-name="403"/>
 
 </beans>
