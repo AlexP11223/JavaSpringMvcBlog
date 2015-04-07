@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+    <div th:fragment="form">
+        <script>
+            $(document).ready(function() {
+                $('#loginForm').hide();
+                $('#loginToggler').click(function(){
+                    $('#loginForm').slideToggle();
+                });
+            });
+        </script>
+
+        <a href="#" class="lead dotted-link" id="loginToggler">Log in</a>
+
+        <form th:action="@{/login}" method="post" id="loginForm">
+            <div class="form-group">
+                <label th:for="${#ids.next('username')}">Username or E-mail:</label>
+                <input type="text" class="form-control" th:id="${#ids.next('username')}" />
+            </div>
+            <div class="form-group">
+                <label th:for="${#ids.next('password')}">Password:</label>
+                <input type="password" class="form-control" th:id="${#ids.next('password')}"/>
+            </div>
+            <div class="checkbox">
+                <label><input type="checkbox"/> Remember me</label>
+            </div>
+            <button type="submit" class="btn btn-default">Log in</button>
+        </form>
+
+        <p class="lead reg-link">
+            <a th:href="@{/register}">or Register</a>
+        </p>
+    </div>
+
+</body>
+</html>

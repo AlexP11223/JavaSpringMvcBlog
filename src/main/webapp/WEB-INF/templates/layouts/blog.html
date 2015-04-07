@@ -53,20 +53,15 @@
             <div class="col-padding">
 
                 <div th:unless="${#authorization.expression('isAuthenticated()')}">
-                    <form th:action="@{/login}" method="post">
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="pwd">Password:</label>
-                            <input type="password" class="form-control" id="pwd"/>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox"/> Remember me</label>
-                        </div>
-                        <button type="submit" class="btn btn-default">Log in</button>
-                    </form>
+                    <th:block th:include="fragments/loginform :: form"/>
+                </div>
+
+                <div th:if="${#authorization.expression('isAuthenticated()')}">
+                    Logged as <strong sec:authentication="name"></strong>
+
+                    <div>
+                        <a th:href="@{/login?logout}">Logout</a>
+                    </div>
                 </div>
 
             </div>
