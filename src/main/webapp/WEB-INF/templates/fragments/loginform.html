@@ -7,31 +7,98 @@
 </head>
 
 <body>
-    <div th:fragment="form">
-        <script>
+    <div th:fragment="form(id)">
+        <script th:inline="javascript">
             $(document).ready(function() {
-                $('#loginForm').hide();
-                $('#loginToggler').click(function(){
-                    $('#loginForm').slideToggle();
+                var id = /*[[${id}]]*/ '';
+
+                var $toggler = $('#' + 'loginToggler' + id);
+                var $form = $('#' + 'loginForm' + id);
+                var $loginErrorLabel = $('#' + 'loginError' + id);
+
+                $form.validate({
+                    rules: {
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        username: {
+                            required: "Enter username or e-mail"
+                        },
+                        password: {
+                            required: "Enter password"
+                        }
+                    }
+                });
+
+                // show/hide login form
+                $toggler.click(function(){
+                    $form.slideToggle(300, function() {
+                        if ($form.is(":visible"))
+                            $('#username' + id).focus();
+                    });
+                });
+
+                // ajax submit login form
+                $form.on('submit', function(e) {
+                    e.preventDefault();
+                    var data =  $form.serializeArray();
+
+                    $loginErrorLabel.hide();
+
+                    if ($form.valid()) {
+                        $.ajax({
+                            type: 'post',
+                            url: $form.attr('action'),
+                            data: data,
+                            success: function (data) {
+                                if (data == 'ok') {
+                                    // reload page content
+                                    $.ajax({
+                                        url: "",
+                                        context: document.body,
+                                        success: function (s) {
+                                            $(this).html(s);
+                                        }
+                                    });
+                                }
+                                else {
+                                    $loginErrorLabel.text('Failed to log in. Check username/e-mail and password.');
+                                    $loginErrorLabel.show();
+                                }
+                            },
+                            error: function () {
+                                $loginErrorLabel.text('Failed to send request.');
+                                $loginErrorLabel.show();
+                            }
+                        });
+                    }
                 });
             });
         </script>
 
-        <a href="#" class="lead dotted-link" id="loginToggler">Log in</a>
+        <a href="#" class="lead dotted-link" th:id="'loginToggler' + ${id}">Log in</a>
 
-        <form th:action="@{/login}" method="post" id="loginForm">
+        <form style="display: none" th:action="@{/login_check}" method="post" th:id="'loginForm' + ${id}">
             <div class="form-group">
-                <label th:for="${#ids.next('username')}">Username or E-mail:</label>
-                <input type="text" class="form-control" th:id="${#ids.next('username')}" />
+                <label th:for="'username' + ${id}">Username or E-mail:</label>
+                <input type="text" class="form-control" name="username" th:id="'username' + ${id}" autocomplete="on" />
             </div>
             <div class="form-group">
-                <label th:for="${#ids.next('password')}">Password:</label>
-                <input type="password" class="form-control" th:id="${#ids.next('password')}"/>
+                <label th:for="'password' + ${id}">Password:</label>
+                <input type="password" class="form-control" name="password" th:id="'password' + ${id}"/>
             </div>
             <div class="checkbox">
                 <label><input type="checkbox"/> Remember me</label>
             </div>
             <button type="submit" class="btn btn-default">Log in</button>
+            <div>
+                <label class="error" th:id="'loginError' + ${id}"></label>
+            </div>
         </form>
 
         <p class="lead reg-link">

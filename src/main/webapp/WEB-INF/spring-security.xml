@@ -15,8 +15,8 @@
 		<access-denied-handler error-page="/403" />
 		<form-login
 				login-processing-url="/login_check"
-				default-target-url="/"
-				authentication-failure-url="/login?error"
+				default-target-url="/login_success" always-use-default-target="true"
+				authentication-failure-url="/login_error"
 				username-parameter="username"
 				password-parameter="password" />
 		<logout invalidate-session="true" logout-url="/dologout" logout-success-url="/"  />

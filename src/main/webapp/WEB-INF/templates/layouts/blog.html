@@ -53,7 +53,7 @@
             <div class="col-padding">
 
                 <div th:unless="${#authorization.expression('isAuthenticated()')}">
-                    <th:block th:include="fragments/loginform :: form"/>
+                    <th:block th:include="fragments/loginform :: form (id=${#ids.seq('id')})"/>
                 </div>
 
                 <div th:if="${#authorization.expression('isAuthenticated()')}">
