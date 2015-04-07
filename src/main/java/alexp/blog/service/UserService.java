@@ -15,29 +15,21 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("userService")
-public class UserService implements UserDetailsService {
+public interface UserService extends UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    User findByEmail(String email);
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    User findByUsername(String username);
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userRepository.findByUsernameOrEmail(s, s);
+    boolean emailExists(String email);
 
-        if (user == null)
-            throw new UsernameNotFoundException("no such user");
+    boolean usernameExists(String username);
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
+    void register(User user);
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                user.isEnabled(), true, true, true, authorities);
-    }
+    void authenticate(User user);
+
+    boolean isAuthenticated();
+
 }
 

@@ -1,6 +1,11 @@
 package alexp.blog.model;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
@@ -12,12 +17,24 @@ public class User {
     private Long Id;
 
     @Column(unique = true, nullable = false, length = 50)
+    // haven't figured out how to specify messages for Size.List in the messages file
+    @Size.List({
+            @Size(min = 3, message = "Username too short"),
+            @Size(max = 25, message = "Username too long")
+    })
     private String username;
 
     @Column(unique = true, nullable = false, length = 50)
+    @Email
+    @NotBlank
     private String email;
 
     @Column(nullable = false, length = 80)
+    // haven't figured out how to specify messages for Size.List in the messages file
+    @Size.List({
+            @Size(min = 6, message = "Password too short"),
+            @Size(max = 80, message = "Password too long")
+    })
     private String password;
 
     @Column(nullable = false)

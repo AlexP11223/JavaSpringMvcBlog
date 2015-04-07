@@ -9,6 +9,7 @@
 .page-footer {
     text-align: center;
     padding: 40px 0;
+    margin-top: 25px;
     background-color: #f9f9f9;
     border-top: 1px solid #e5e5e5;
 }
@@ -16,4 +17,29 @@
 .col-padding {
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.reg-link {
+    margin-top: 10px;
+    white-space: nowrap;
+}
+
+.dotted-link {
+    border-bottom: 1px dotted #337ab7;
+}
+
+.error-line {
+    color: red;
+}
+
+.list-no-indent {
+    list-style-position: inside;
+    padding-left:0;
+}
+
+label.error {
+    color: red;
+    margin-top: 5px;
+    display: inline;
+
 }

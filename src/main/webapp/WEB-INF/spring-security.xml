@@ -24,7 +24,7 @@
 		<csrf />
 	</http>
 
-	<authentication-manager>
+	<authentication-manager alias="authenticationManager">
 		<authentication-provider user-service-ref="userService">
 			<password-encoder ref="passwordEncoder" />
 		</authentication-provider>

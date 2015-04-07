@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+
+      layout:decorator="layouts/blog">
+
+<head>
+</head>
+
+<body>
+
+<section layout:fragment="content">
+    <script th:inline="javascript">
+        $().ready(function() {
+            var emailCheckUrl = /*[[@{/check_email}]]*/ '';
+            var usernameCheckUrl = /*[[@{/check_username}]]*/ '';
+
+            $.validator.methods._remote = $.validator.methods.remote;
+            var timer = 0;
+            $.validator.methods.remote = function () {
+                clearTimeout(timer);
+
+                var args = arguments;
+
+                timer = setTimeout(function() {
+                    $.validator.methods._remote.apply(this, args);
+                }.bind(this), 500);
+
+                return "pending";
+            };
+
+            $("#regForm").validate({
+                rules: {
+                    username: {
+                        required: true,
+                        minlength: 3,
+                        remote: {
+                            url: usernameCheckUrl,
+                            type: "get",
+                            data: {
+                                username: function () {
+                                    return $("#username").val();
+                                }
+                            }
+                        }
+                    },
+                    email: {
+                        required: true,
+                        remote: {
+                            url: emailCheckUrl,
+                            type: "get",
+                            data: {
+                                email: function () {
+                                    return $("#email").val();
+                                }
+                            }
+                        }
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    },
+                    password2: {
+                        required: true,
+                        equalTo: "#password"
+                    }
+                },
+                messages: {
+                    username: {
+                        required: "Enter username",
+                        minlength: "Too short username",
+                        remote: function (params) {
+                            return "Username " + params + " already registered. Have you already registered? Contact admin if you forgot your password";
+                        }
+                    },
+                    email: {
+                        required: "Enter e-mail",
+                        remote: function (params) {
+                            return "Email " + params + " already registered. Have you already registered? Contact admin if you forgot your password";
+                        }
+                    },
+                    password: {
+                        required: "Enter password",
+                        minlength: "Password too short"
+                    },
+                    password2: {
+                        required: "Enter password",
+                        equalTo: "Passwords do not match"
+                    }
+                }
+            });
+        });
+    </script>
+
+    <div class="col-sm-4">
+        <h2>Registration</h2>
+
+        <form th:action="@{/register}" th:object="${user}" method="post" id="regForm">
+            <div th:if="${#fields.hasErrors('*')}">
+                <ul class="list-no-indent">
+                    <li class="error-line" th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" id="username" th:field="*{username}"/>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" th:field="*{email}"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" th:field="*{password}"/>
+            </div>
+            <div class="form-group">
+                <label for="password2">Repeat password:</label>
+                <input type="password" class="form-control" id="password2" name="password2"/>
+            </div>
+            <button type="submit" class="btn btn-default">Register</button>
+
+        </form>
+    </div>
+</section>
+
+</body>
+</html>

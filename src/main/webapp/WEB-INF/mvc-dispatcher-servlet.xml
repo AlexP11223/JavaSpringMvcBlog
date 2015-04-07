@@ -16,6 +16,10 @@
     <mvc:annotation-driven />
     <context:component-scan base-package="alexp.blog" />
 
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="Messages" />
+    </bean>
+
     <!-- Thymeleaf resolver, etc. -->
 
     <bean id="templateResolver"
