@@ -33,9 +33,8 @@ public class RegistrationController {
 
         String ref = request.getHeader("referer");
 
-        session.setAttribute("regRef", ref);
-
-        System.out.println(ref);
+        if (!ref.contains("/register"))
+            session.setAttribute("regRef", ref);
 
         return "registration";
     }
