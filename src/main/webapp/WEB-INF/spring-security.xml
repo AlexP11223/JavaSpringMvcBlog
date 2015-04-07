@@ -14,12 +14,12 @@
 
 		<access-denied-handler error-page="/403" />
 		<form-login
-				login-page="/login"
+				login-processing-url="/login_check"
 				default-target-url="/"
 				authentication-failure-url="/login?error"
 				username-parameter="username"
 				password-parameter="password" />
-		<logout logout-success-url="/login?logout" />
+		<logout invalidate-session="true" logout-url="/dologout" logout-success-url="/"  />
 
 		<csrf />
 	</http>
