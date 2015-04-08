@@ -39,6 +39,8 @@
 
                 // show/hide login form
                 $toggler.click(function(){
+                    event.preventDefault();
+
                     $form.slideToggle(300, function() {
                         if ($form.is(":visible"))
                             $('#username' + id).focus();
