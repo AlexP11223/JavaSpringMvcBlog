@@ -15,6 +15,8 @@
                 var $toggler = $('#' + 'loginToggler' + id);
                 var $form = $('#' + 'loginForm' + id);
                 var $loginErrorLabel = $('#' + 'loginError' + id);
+                var $loginBtn = $('#' + 'loginbtn' + id);
+                var $loadingIndicator = $('#' + 'loadingIndicator' + id);
 
                 $form.validate({
                     rules: {
@@ -51,6 +53,9 @@
                     $loginErrorLabel.hide();
 
                     if ($form.valid()) {
+                        $loginBtn.prop('disabled', true)
+                        $loadingIndicator.show();
+
                         $.ajax({
                             type: 'post',
                             url: $form.attr('action'),
@@ -67,11 +72,15 @@
                                     });
                                 }
                                 else {
+                                    $loginBtn.prop('disabled', false)
+                                    $loadingIndicator.hide();
                                     $loginErrorLabel.text('Failed to log in. Check username/e-mail and password.');
                                     $loginErrorLabel.show();
                                 }
                             },
                             error: function () {
+                                $loginBtn.prop('disabled', true)
+                                $loadingIndicator.hide();
                                 $loginErrorLabel.text('Failed to send request.');
                                 $loginErrorLabel.show();
                             }
@@ -93,9 +102,12 @@
                 <input type="password" class="form-control" name="password" th:id="'password' + ${id}"/>
             </div>
             <div class="checkbox">
-                <label><input type="checkbox"/> Remember me</label>
+                <label><input type="checkbox" name="remember"/>Remember me</label>
             </div>
-            <button type="submit" class="btn btn-default">Log in</button>
+            <button type="submit" class="btn btn-default" th:id="'loginbtn' + ${id}">Log in</button>
+            <div>
+                <img th:src="@{/images/ajax-loader.gif}" th:id="'loadingIndicator' + ${id}" style="display:none" />
+            </div>
             <div>
                 <label class="error" th:id="'loginError' + ${id}"></label>
             </div>
