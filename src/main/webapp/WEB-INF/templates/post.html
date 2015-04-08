@@ -36,6 +36,14 @@
 
     <div class="comments">
         <p class="lead">Comments</p>
+
+        <p class="lead">Add a comment</p>
+
+        <div class="comment-form">
+            <div class="col-sm-4" th:unless="${#authorization.expression('isAuthenticated()')}">
+                <th:block th:include="fragments/loginform :: form ('comments')"/>
+            </div>
+        </div>
     </div>
 </section>
 
