@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+
+      layout:decorator="layouts/blog">
+
+<head>
+
+</head>
+
+<body>
+
+<section layout:fragment="content">
+
+    <script>
+        $(document).ready(function() {
+            if (location.hash = '#comments') {
+                $('.comments').get(0).scrollIntoView();
+            }
+        });
+    </script>
+
+    <div class="post">
+        <h2 class="post-title" th:text="${post.title}"></h2>
+        <p class="post-date" th:text="${#dates.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>
+
+        <div class="post-tags">
+            <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/tag(name=${tag.name})}"></a>
+        </div>
+
+        <div class="post-content" th:utext="${post.fullPostTextHtml()}"></div>
+    </div>
+
+    <div class="comments">
+        <p class="lead">Comments</p>
+    </div>
+</section>
+
+</body>
+</html>

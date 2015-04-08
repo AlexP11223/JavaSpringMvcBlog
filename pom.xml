@@ -113,10 +113,20 @@
             <version>5.1.35</version>
         </dependency>
 
+        <!-- validator -->
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>5.1.3.Final</version>
+        </dependency>
+
+        <!-- markdown -->
+
+        <dependency>
+            <groupId>com.github.rjeschke</groupId>
+            <artifactId>txtmark</artifactId>
+            <version>0.13</version>
         </dependency>
 
         <!-- testing -->

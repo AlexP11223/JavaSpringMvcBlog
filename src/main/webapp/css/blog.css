@@ -42,3 +42,51 @@ label.error {
     margin-top: 5px;
     display: inline;
 }
+
+.user-menu {
+    padding-top: 25px;
+}
+
+.post {
+    padding-bottom: 50px;
+}
+
+.post-title {
+
+}
+
+.post-date {
+    color: #999;
+
+}
+
+.post-tag {
+    color: #3e6d8e;
+    background-color: #e4edf4;
+    border: 1px solid #e4edf4;
+    white-space: nowrap;
+    text-align: center;
+    text-decoration: none;
+    padding: 3px 10px;
+    margin: 2px 2px 2px 0;
+}
+
+.post-content {
+    margin-top: 15px;
+}
+
+.pager {
+    text-align: left;
+}
+
+.post-actions {
+    margin-top: 10px;
+}
+
+.post-actions a {
+    margin-right: 10px;
+}
+
+.comments {
+
+}
