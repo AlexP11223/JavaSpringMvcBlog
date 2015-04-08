@@ -21,6 +21,8 @@
 				password-parameter="password" />
 		<logout invalidate-session="true" logout-url="/dologout" logout-success-url="/"  />
 
+		<remember-me data-source-ref="dataSource" token-validity-seconds="259200" remember-me-parameter="remember"/>
+
 		<csrf />
 	</http>
 
