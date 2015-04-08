@@ -22,6 +22,7 @@ public class User {
             @Size(min = 3, message = "Username too short"),
             @Size(max = 25, message = "Username too long")
     })
+    @NotBlank
     private String username;
 
     @Column(unique = true, nullable = false, length = 50)
