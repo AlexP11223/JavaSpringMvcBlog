@@ -14,6 +14,10 @@
 <body>
 
 <section layout:fragment="content">
+    <div th:if="${tag != null}">
+        <h2 th:text="${tag}"></h2>
+    </div>
+
     <div class="post" th:each="post, iterStat : ${postsPage.getContent()}">
         <a class="h2 post-title" th:text="${post.title}" th:href="@{/post(id=${post.id})}"></a>
         <p class="post-date" th:text="${#dates.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>

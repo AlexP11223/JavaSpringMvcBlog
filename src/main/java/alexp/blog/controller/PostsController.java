@@ -28,6 +28,12 @@ public class PostsController {
 		return "posts";
 	}
 
+	@RequestMapping(value = "/tag", method = RequestMethod.GET)
+	public @ResponseBody String searchByTag(@RequestParam(value = "name") String tagName, ModelMap model) {
+
+		return "search by tag: TODO";
+	}
+
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public String showPost(@RequestParam(value = "id") Long postId, ModelMap model) {
 
