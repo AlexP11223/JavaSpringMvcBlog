@@ -39,6 +39,9 @@ public class PostsController {
 
 		Post post = postService.getPost(postId);
 
+		if (post == null)
+			throw new ResourceNotFoundException();
+
 		model.addAttribute("post", post);
 
 		return "post";
