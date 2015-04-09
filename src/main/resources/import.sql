@@ -1658,3 +1658,7 @@ INSERT INTO posts_tags(post_id, tag_id) VALUES (85, 3);
 INSERT INTO posts_tags(post_id, tag_id) VALUES (85, 4);
 INSERT INTO posts_tags(post_id, tag_id) VALUES (85, 5);
 
+
+INSERT INTO comments(commentText, dateTime, post_id, user_id) VALUES('Great post! Keep it up!', '2015-04-03 14:30:58', 85, 2);
+INSERT INTO comments(commentText, dateTime, post_id, user_id) VALUES('Yeah, I learnt **so much** here.', '2015-04-03 16:35:58', 85, 3);
+INSERT INTO comments(commentText, dateTime, post_id, user_id) VALUES('Thank you.:)', '2015-04-03 19:00:58', 85, 1);

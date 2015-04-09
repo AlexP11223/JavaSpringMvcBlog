@@ -1,7 +1,9 @@
 package alexp.blog.controller;
 
+import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
 import alexp.blog.service.PostService;
+import alexp.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,9 @@ import java.util.List;
 
 @Controller
 public class PostsController {
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private PostService postService;
@@ -36,13 +41,16 @@ public class PostsController {
 
 	@RequestMapping(value = "/post", method = RequestMethod.GET)
 	public String showPost(@RequestParam(value = "id") Long postId, ModelMap model) {
-
 		Post post = postService.getPost(postId);
 
 		if (post == null)
 			throw new ResourceNotFoundException();
 
 		model.addAttribute("post", post);
+
+		if (userService.isAuthenticated()) {
+			model.addAttribute("comment", new Comment());
+		}
 
 		return "post";
 	}

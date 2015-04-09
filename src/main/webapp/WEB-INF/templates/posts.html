@@ -33,8 +33,9 @@
         </div>
 
         <div class="post-actions">
-            <a th:href="@{/post(id=${post.id})} + '#comments'">Comments</a>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/post/edit(id=${post.id})}">Edit</a>
+            <a th:href="@{/post(id=${post.id})} + '#comments'"
+               th:text="${post.comments.size() == 0} ? 'comments' : (${post.comments.size()} + ' comment' + (${post.comments.size() &gt; 1} ? 's' : ''))"></a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/post/edit(id=${post.id})}">edit</a>
         </div>
     </div>
 

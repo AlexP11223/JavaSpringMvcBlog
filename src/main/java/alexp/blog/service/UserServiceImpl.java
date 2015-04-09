@@ -93,4 +93,16 @@ public class UserServiceImpl implements UserService {
 
         return auth != null && !(auth instanceof AnonymousAuthenticationToken) && auth.isAuthenticated();
     }
+
+    @Override
+    public User currentUser() {
+        if (!isAuthenticated())
+            return null;
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
+        Authentication auth = securityContext.getAuthentication();
+
+        return userRepository.findByUsername(auth.getName());
+    }
 }

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+    <th:block th:fragment="commentList">
+        <div class="comment" th:each="comment : ${comments}">
+            <a href="#" class="comment-title" th:text="${comment.user.username}"></a>
+            <span class="post-date" th:text="${#dates.format(comment.dateTime, 'MMM dd, yyyy HH:mm')}"></span>
+
+            <div class="comment-content" th:utext="${comment.getCommentTextHtml()}"></div>
+        </div>
+    </th:block>
+
+</body>
+</html>

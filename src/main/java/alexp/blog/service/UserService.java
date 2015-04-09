@@ -31,5 +31,7 @@ public interface UserService extends UserDetailsService {
 
     boolean isAuthenticated();
 
+    User currentUser();
+
 }
 
