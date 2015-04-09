@@ -2,7 +2,6 @@ package alexp.blog.service;
 
 import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

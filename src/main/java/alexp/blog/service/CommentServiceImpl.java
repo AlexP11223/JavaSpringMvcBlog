@@ -2,14 +2,8 @@ package alexp.blog.service;
 
 import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
-import alexp.blog.model.Tag;
 import alexp.blog.repository.CommentRepository;
-import alexp.blog.repository.PostRepository;
-import alexp.blog.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
