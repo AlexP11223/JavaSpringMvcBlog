@@ -22,8 +22,8 @@ public class PostServiceImpl implements PostService
     TagRepository tagRepository;
 
     @Override
-    public Page<Post> getPostsPage(int pageNumber) {
-        return postRepository.findAll(new PageRequest(pageNumber, 10, Sort.Direction.DESC, "dateTime"));
+    public Page<Post> getPostsPage(int pageNumber, int pageSize) {
+        return postRepository.findAll(new PageRequest(pageNumber, pageSize, Sort.Direction.DESC, "dateTime"));
     }
 
     @Override

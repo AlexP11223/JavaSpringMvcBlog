@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 
 public interface PostService {
 
-    Page<Post> getPostsPage(int pageNumber);
+    Page<Post> getPostsPage(int pageNumber, int pageSize);
 
     Post getPost(Long id);
 

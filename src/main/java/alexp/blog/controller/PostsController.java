@@ -24,7 +24,7 @@ public class PostsController {
 
 	@RequestMapping(value = {"/", "/posts"}, method = RequestMethod.GET)
 	public String showPostsList(@RequestParam(value = "page", defaultValue = "0") Integer pageNumber, ModelMap model) {
-		Page<Post> postsPage = postService.getPostsPage(pageNumber);
+		Page<Post> postsPage = postService.getPostsPage(pageNumber, 10);
 
 		model.addAttribute("postsPage", postsPage);
 
