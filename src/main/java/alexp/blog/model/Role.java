@@ -1,6 +1,7 @@
 package alexp.blog.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
@@ -14,7 +15,7 @@ public class Role {
     private String name;
 
     @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+    private Collection<User> users = new ArrayList<>();;
 
     public Long getId() {
         return Id;
