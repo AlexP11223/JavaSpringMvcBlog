@@ -1,6 +1,6 @@
 package alexp.blog.model;
 
-import com.github.rjeschke.txtmark.Processor;
+import alexp.blog.service.MarkdownConverter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.StringUtils;
 
@@ -60,11 +60,11 @@ public class Post {
     }
 
     public String shortTextPartHtml() {
-        return Processor.process(getShortTextPart(), true);
+        return MarkdownConverter.toHtml(getShortTextPart());
     }
 
     public String fullPostTextHtml() {
-        return Processor.process(getFullPostText().replace(shortPartSeparator(), ""), true);
+        return MarkdownConverter.toHtml(getFullPostText().replace(shortPartSeparator(), ""));
     }
 
     public Long getId() {

@@ -1,6 +1,6 @@
 package alexp.blog.model;
 
-import com.github.rjeschke.txtmark.Processor;
+import alexp.blog.service.MarkdownConverter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -44,7 +44,7 @@ public class Comment {
     }
 
     public String getCommentTextHtml() {
-        return Processor.process(getCommentText(), true);
+        return MarkdownConverter.toHtml(getCommentText());
     }
 
     public Date getDateTime() {
