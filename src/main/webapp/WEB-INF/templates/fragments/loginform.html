@@ -55,7 +55,7 @@
                     $loginErrorLabel.hide();
 
                     if ($form.valid()) {
-                        $loginBtn.prop('disabled', true)
+                        $loginBtn.prop('disabled', true);
                         $loadingIndicator.show();
 
                         $.ajax({
@@ -74,14 +74,14 @@
                                     });
                                 }
                                 else {
-                                    $loginBtn.prop('disabled', false)
+                                    $loginBtn.prop('disabled', false);
                                     $loadingIndicator.hide();
                                     $loginErrorLabel.text('Failed to log in. Check username/e-mail and password.');
                                     $loginErrorLabel.show();
                                 }
                             },
                             error: function () {
-                                $loginBtn.prop('disabled', true)
+                                $loginBtn.prop('disabled', true);
                                 $loadingIndicator.hide();
                                 $loginErrorLabel.text('Failed to send request.');
                                 $loginErrorLabel.show();
