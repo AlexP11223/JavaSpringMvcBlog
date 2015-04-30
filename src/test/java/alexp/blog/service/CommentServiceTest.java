@@ -74,6 +74,6 @@ public class CommentServiceTest {
 
         assertThat(comment.getUser(), is(equalTo(user)));
 
-        verify(commentRepository, times(1)).save(Matchers.any(Comment.class));
+        verify(commentRepository, times(1)).saveAndFlush(Matchers.any(Comment.class));
     }
 }

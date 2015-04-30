@@ -54,6 +54,6 @@ public class PostServiceImpl implements PostService
             post.getTags().add(tag);
         }
 
-        postRepository.save(post);
+        postRepository.saveAndFlush(post);
     }
 }

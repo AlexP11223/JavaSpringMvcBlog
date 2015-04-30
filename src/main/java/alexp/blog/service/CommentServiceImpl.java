@@ -31,6 +31,6 @@ public class CommentServiceImpl implements CommentService {
 
         comment.setUser(userService.currentUser());
 
-        commentRepository.save(comment);
+        commentRepository.saveAndFlush(comment);
     }
 }

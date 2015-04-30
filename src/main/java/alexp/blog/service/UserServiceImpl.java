@@ -50,12 +50,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailIgnoreCase(email);
     }
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userRepository.findByUsernameIgnoreCase(username);
     }
 
     @Override
@@ -105,6 +105,6 @@ public class UserServiceImpl implements UserService {
 
         Authentication auth = securityContext.getAuthentication();
 
-        return userRepository.findByUsername(auth.getName());
+        return userRepository.findByUsernameIgnoreCase(auth.getName());
     }
 }

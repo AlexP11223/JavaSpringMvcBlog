@@ -1,0 +1,36 @@
+<dataset>
+    <users id="1" username="admin" email="admin@gmail.com" enabled="1" password="$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO"/>
+    <users id="2" username="Alice" email="alice@gmail.com" enabled="1" password="$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO"/>
+    <users id="3" username="Bob" email="bob@gmail.com" enabled="1" password="$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO"/>
+
+    <roles id="1" name="ROLE_USER"/>
+    <roles id="2" name="ROLE_ADMIN"/>
+
+    <users_roles user_id="1" role_id="1"/>
+    <users_roles user_id="1" role_id="2"/>
+    <users_roles user_id="2" role_id="1"/>
+    <users_roles user_id="3" role_id="1"/>
+
+    <posts id="1" fullPostText="hello world text" title="hello title"/>
+    <posts id="2" shortTextPart="meow short" fullPostText="meow short ===cut=== text" title="meow title"/>
+    <posts id="3" shortTextPart="new post short text" fullPostText="new post short text===cut===new post full text Lorem ipsum" title="new post title"/>
+    <posts id="4" fullPostText="new post 2 text Lorem ipsum dolor sit amet, consectetur adipiscing elit" title="new post title"/>
+
+    <tags id="1" name="c++"/>
+    <tags id="2" name="hello world"/>
+    <tags id="3" name="meow"/>
+    <tags id="4" name="java"/>
+
+    <posts_tags post_id="1" tag_id="1"/>
+    <posts_tags post_id="1" tag_id="2"/>
+    <posts_tags post_id="2" tag_id="3"/>
+    <posts_tags post_id="3" tag_id="1"/>
+    <posts_tags post_id="3" tag_id="2"/>
+    <posts_tags post_id="3" tag_id="4"/>
+    <posts_tags post_id="4" tag_id="4"/>
+
+    <comments id="1" post_id="1" user_id="2" commentText="comment1 text" dateTime="2015-04-01 13:30:00"/>
+    <comments id="2" post_id="1" user_id="1" commentText="comment2 text" dateTime="2015-04-01 13:40:00"/>
+    <comments id="3" post_id="1" user_id="2" commentText="comment3 text" dateTime="2015-04-01 13:50:00"/>
+
+</dataset>

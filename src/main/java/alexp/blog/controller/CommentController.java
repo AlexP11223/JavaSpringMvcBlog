@@ -27,6 +27,9 @@ public class CommentController {
     public String showComments(@RequestParam(value = "postid") Long postId, ModelMap model) {
         Post post = postService.getPost(postId);
 
+        if (post == null)
+            throw new ResourceNotFoundException();
+
         List<Comment> comments = commentService.getPostComments(post);
 
         model.addAttribute("comments", comments);
@@ -43,6 +46,9 @@ public class CommentController {
         }
 
         Post post = postService.getPost(postId);
+
+        if (post == null)
+            return "post not found";
 
         commentService.saveNewComment(comment, post);
 

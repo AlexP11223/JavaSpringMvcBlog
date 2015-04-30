@@ -125,6 +125,6 @@ public class PostServiceTest {
         verify(tagRepository, times(2)).findByNameIgnoreCase(Matchers.anyString());
         verify(tagRepository, times(2)).save(Matchers.any(Tag.class));
 
-        verify(postRepository, times(1)).save(Matchers.any(Post.class));
+        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
     }
 }

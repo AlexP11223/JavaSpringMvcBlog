@@ -1,32 +1,21 @@
 package alexp.blog;
 
+import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterChainProxy;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
-
-import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,17 +23,18 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @ContextConfiguration({ "file:src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml",
         "classpath:/database.xml",
         "file:src/main/webapp/WEB-INF/spring-security.xml" })
+@ActiveProfiles("test")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
         DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class })
+        TransactionDbUnitTestExecutionListener.class})
 @Transactional
-public class AppIT {
+public abstract class AbstractIntegrationTest {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
-    @Resource
-    private FilterChainProxy springSecurityFilterChain;
+    @Autowired
+    protected FilterChainProxy springSecurityFilterChain;
 
-    private MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
@@ -53,18 +43,13 @@ public class AppIT {
     @Before
     public void setup() {
         this.mockMvc = webAppContextSetup(this.wac).addFilter(springSecurityFilterChain).build();
+
+        setupTest();
     }
 
-    @Test
-    public void simple() throws Exception {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
+    // child classes should override this instead of using @Before (order of @Before is not guaranteed if names are not unique)
+    protected void setupTest()
+    {
 
-        Authentication auth = securityContext.getAuthentication();
-
-        assertNull(auth);
-
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("posts"));
     }
 }

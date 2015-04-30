@@ -49,13 +49,13 @@ public class UserServiceTest {
     public void shouldFindByEmail() {
         User user = new User();
 
-        when(userRepository.findByEmail(EMAIL)).thenReturn(user);
+        when(userRepository.findByEmailIgnoreCase(EMAIL)).thenReturn(user);
 
         assertThat(userService.emailExists(EMAIL), is(equalTo(true)));
 
         assertThat(userService.findByEmail(EMAIL), is(equalTo(user)));
 
-        verify(userRepository, atLeastOnce()).findByEmail(Matchers.anyString());
+        verify(userRepository, atLeastOnce()).findByEmailIgnoreCase(Matchers.anyString());
     }
 
     @Test
@@ -64,20 +64,20 @@ public class UserServiceTest {
 
         assertThat(userService.findByEmail(EMAIL), is(equalTo(null)));
 
-        verify(userRepository, atLeastOnce()).findByEmail(Matchers.anyString());
+        verify(userRepository, atLeastOnce()).findByEmailIgnoreCase(Matchers.anyString());
     }
 
     @Test
     public void shouldFindByUsername() {
         User user = new User();
 
-        when(userRepository.findByUsername(NAME)).thenReturn(user);
+        when(userRepository.findByUsernameIgnoreCase(NAME)).thenReturn(user);
 
         assertThat(userService.usernameExists(NAME), is(equalTo(true)));
 
         assertThat(userService.findByUsername(NAME), is(equalTo(user)));
 
-        verify(userRepository, atLeastOnce()).findByUsername(Matchers.anyString());
+        verify(userRepository, atLeastOnce()).findByUsernameIgnoreCase(Matchers.anyString());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class UserServiceTest {
 
         assertThat(userService.findByUsername(NAME), is(equalTo(null)));
 
-        verify(userRepository, atLeastOnce()).findByUsername(Matchers.anyString());
+        verify(userRepository, atLeastOnce()).findByUsernameIgnoreCase(Matchers.anyString());
     }
 
     @Test
