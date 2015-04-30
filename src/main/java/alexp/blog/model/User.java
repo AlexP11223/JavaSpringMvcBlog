@@ -37,6 +37,7 @@ public class User {
             @Size(min = 6, message = "Password too short"),
             @Size(max = 80, message = "Password too long")
     })
+    @NotBlank
     private String password;
 
     @Column(nullable = false)
