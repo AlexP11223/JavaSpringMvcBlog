@@ -16,68 +16,73 @@ import javax.validation.Valid;
 @Controller
 public class PostsController {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private PostService postService;
+    @Autowired
+    private PostService postService;
 
-	@RequestMapping(value = {"/", "/posts"}, method = RequestMethod.GET)
-	public String showPostsList(@RequestParam(value = "page", defaultValue = "0") Integer pageNumber, ModelMap model) {
-		Page<Post> postsPage = postService.getPostsPage(pageNumber, 10);
+    @RequestMapping(value = {"/", "/posts"}, method = RequestMethod.GET)
+    public String showPostsList(@RequestParam(value = "page", defaultValue = "0") Integer pageNumber, ModelMap model) {
+        Page<Post> postsPage = postService.getPostsPage(pageNumber, 10);
 
-		model.addAttribute("postsPage", postsPage);
+        model.addAttribute("postsPage", postsPage);
 
-		return "posts";
-	}
+        return "posts";
+    }
 
-	@RequestMapping(value = "/tag", method = RequestMethod.GET)
-	public @ResponseBody String searchByTag(@RequestParam(value = "name") String tagName, ModelMap model) {
+    @RequestMapping(value = "/tag", method = RequestMethod.GET)
+    public @ResponseBody String searchByTag(@RequestParam(value = "name") String tagName, ModelMap model) {
 
-		return "search by tag: TODO";
-	}
+        return "search by tag: TODO";
+    }
 
-	@RequestMapping(value = "/post", method = RequestMethod.GET)
-	public String showPost(@RequestParam(value = "id") Long postId, ModelMap model) {
-		Post post = postService.getPost(postId);
+    @RequestMapping(value = "/post", method = RequestMethod.GET)
+    public String showPost(@RequestParam(value = "id") Long postId, ModelMap model) {
+        Post post = postService.getPost(postId);
 
-		if (post == null)
-			throw new ResourceNotFoundException();
+        if (post == null)
+            throw new ResourceNotFoundException();
 
-		model.addAttribute("post", post);
+        model.addAttribute("post", post);
 
-		if (userService.isAuthenticated()) {
-			model.addAttribute("comment", new Comment());
-		}
+        if (userService.isAuthenticated()) {
+            model.addAttribute("comment", new Comment());
+        }
 
-		return "post";
-	}
+        return "post";
+    }
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/post/create", method = RequestMethod.GET)
-	public String showPostForm(ModelMap model) {
-		model.addAttribute("post", new Post());
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/post/create", method = RequestMethod.GET)
+    public String showCreatePostForm(ModelMap model) {
+        model.addAttribute("post", new Post());
 
-		return "createpost";
-	}
+        model.addAttribute("edit", false);
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/post/create", method = RequestMethod.POST)
-	public String createPost(@Valid @ModelAttribute(value = "post") Post post, BindingResult result,
-							 @RequestParam(value = "tagstext", defaultValue = "") String tagstext) {
-		if (result.hasErrors()) {
-			return "createpost";
-		}
+        return "createpost";
+    }
 
-		postService.saveNewPost(post, tagstext);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/post/create", method = RequestMethod.POST)
+    public String createPost(ModelMap model, @Valid @ModelAttribute(value = "post") Post post, BindingResult result,
+                             @RequestParam(value = "tagstext", defaultValue = "") String tagstext) {
+        if (result.hasErrors()) {
+            model.addAttribute("edit", false);
 
+            return "createpost";
+        }
 
-		return "redirect:/posts";
-	}
+        postService.saveNewPost(post, tagstext);
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@RequestMapping(value = "/post/edit")
-	public @ResponseBody String editPost() {
-		return "TODO";
-	}
+        return "redirect:/posts";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/post/edit", method = RequestMethod.GET)
+    public String showEditPostForm(ModelMap model) {
+        model.addAttribute("edit", true);
+
+        return "createpost";
+    }
 }
