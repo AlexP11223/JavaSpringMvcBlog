@@ -2,6 +2,7 @@ package alexp.blog.service;
 
 import alexp.blog.model.Role;
 import alexp.blog.model.User;
+import alexp.blog.repository.RoleRepository;
 import alexp.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -67,6 +71,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        user.getRoles().add(roleRepository.findByName("ROLE_USER"));
 
         user.setEnabled(true);
 

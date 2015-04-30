@@ -2,6 +2,7 @@ package alexp.blog.service;
 
 import alexp.blog.model.Role;
 import alexp.blog.model.User;
+import alexp.blog.repository.RoleRepository;
 import alexp.blog.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,8 +27,12 @@ public class UserServiceTest {
 
     public static final String NAME = "name";
     public static final String EMAIL = "email";
+
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private RoleRepository roleRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -86,13 +91,22 @@ public class UserServiceTest {
 
     @Test
     public void shouldAddNewUser() {
+        Role role = new Role();
+
+        when(roleRepository.findByName(Matchers.anyString())).thenReturn(role);
+
         User user = new User();
 
         userService.register(user);
 
         assertThat(user.isEnabled(), is(equalTo(true)));
 
+        assertThat(user.getRoles().size(), is(equalTo(1)));
+        assertThat(user.getRoles().get(0), is(role));
+
         verify(userRepository, times(1)).saveAndFlush(user);
+
+        verify(roleRepository, times(1)).findByName(Matchers.anyString());
     }
 
     @Test
