@@ -26,4 +26,6 @@
     <comments id="2" post_id="1" user_id="1" commentText="comment2 text" dateTime="2015-04-01 13:40:00"/>
     <comments id="3" post_id="1" user_id="2" commentText="comment3 text" dateTime="2015-04-01 13:50:00"/>
 
+    <persistent_logins/>
+
 </dataset>

@@ -23,7 +23,7 @@
                 <entry key="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
                 <entry key="hibernate.format_sql" value="true"/>
                 <entry key="hibernate.hbm2ddl.auto" value="create-drop"/>
-                <entry key="hibernate.hbm2ddl.import_files" value="no" />
+                <entry key="hibernate.hbm2ddl.import_files" value="/security-tables.sql" />
             </map>
         </property>
     </bean>
