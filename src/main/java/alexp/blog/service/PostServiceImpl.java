@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service("postService")
@@ -89,7 +90,15 @@ public class PostServiceImpl implements PostService
 
         int cutInd = postEditDto.getText().indexOf(Post.shortPartSeparator());
         if (cutInd > 0) {
-            post.setShortTextPart(postEditDto.getText().substring(0, cutInd));
+            String shortText = postEditDto.getText().substring(0, cutInd);
+
+            List<String> links = MarkdownConverter.extractLinks(postEditDto.getText());
+
+            if (!links.isEmpty()) {
+                shortText += "\n" + links.stream().collect(Collectors.joining("\n"));
+            }
+
+            post.setShortTextPart(shortText);
         }
         else {
             post.setShortTextPart(null);

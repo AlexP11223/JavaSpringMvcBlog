@@ -203,4 +203,31 @@ public class PostServiceTest {
 
         verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
     }
+
+    @Test
+    public void shouldAddLinksToShortPart() {
+        String text = "Lorem ipsum\n" +
+                "hello [google][1] [yandex][2] world\n" +
+                "===cut===\n" +
+                "full text\n" +
+                "\n" +
+                "\n" +
+                "  [1]: http://www.google.com\n" +
+                "  [2]: http://ya.ru";
+
+        String links = "  [1]: http://www.google.com\n" +
+                "  [2]: http://ya.ru";
+
+        PostEditDto postEditDto = new PostEditDto();
+        postEditDto.setText(text);
+
+        Post post = postService.saveNewPost(postEditDto);
+
+        assertThat(post.getShortTextPart(), containsString(links));
+        assertThat(post.getShortTextPart(), not(containsString("full text")));
+
+        assertThat(post.getFullPostText(), allOf(containsString("full text"), containsString(links)));
+
+        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
+    }
 }
