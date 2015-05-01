@@ -38,8 +38,8 @@ public class PostsController {
         return "search by tag: TODO";
     }
 
-    @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String showPost(@RequestParam("id") Long postId, ModelMap model) {
+    @RequestMapping(value = "/posts/{postId}", method = RequestMethod.GET)
+    public String showPost(@PathVariable("postId") Long postId, ModelMap model) {
         Post post = postService.getPost(postId);
 
         if (post == null)
@@ -55,7 +55,7 @@ public class PostsController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/post/create", method = RequestMethod.GET)
+    @RequestMapping(value = "/posts/create", method = RequestMethod.GET)
     public String showCreatePostForm(ModelMap model) {
         model.addAttribute("post", new PostEditDto());
 
@@ -65,7 +65,7 @@ public class PostsController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/post/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/posts/create", method = RequestMethod.POST)
     public String createPost(ModelMap model, @Valid @ModelAttribute("post") PostEditDto post, BindingResult result) {
         if (result.hasErrors()) {
             model.addAttribute("edit", false);
@@ -79,8 +79,8 @@ public class PostsController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/post/edit", method = RequestMethod.GET)
-    public String showEditPostForm(@RequestParam("id") Long postId, ModelMap model) {
+    @RequestMapping(value = "/posts/{postId}/edit", method = RequestMethod.GET)
+    public String showEditPostForm(@PathVariable("postId") Long postId, ModelMap model) {
         PostEditDto post = postService.getEditablePost(postId);
 
         if (post == null)
@@ -94,9 +94,9 @@ public class PostsController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @RequestMapping(value = "/post/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/posts/{postId}/edit", method = RequestMethod.POST)
     public String showEditPostForm(ModelMap model, @Valid @ModelAttribute("post") PostEditDto post, BindingResult result,
-                                   @RequestParam("id") Long postId) {
+                                   @PathVariable("postId") Long postId) {
         post.setId(postId);
 
         if (result.hasErrors()) {
@@ -107,6 +107,6 @@ public class PostsController {
 
         postService.updatePost(post);
 
-        return "redirect:/post?id=" + postId;
+        return "redirect:/posts/" + postId;
     }
 }

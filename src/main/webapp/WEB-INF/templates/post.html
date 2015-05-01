@@ -125,7 +125,7 @@
         <div class="post-content" th:utext="${post.fullPostTextHtml()}"></div>
 
         <div class="post-actions">
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/post/edit(id=${post.id})}">edit</a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{|/posts/${post.id}/edit|}">edit</a>
         </div>
     </div>
 

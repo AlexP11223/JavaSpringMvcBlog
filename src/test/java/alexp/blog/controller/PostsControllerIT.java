@@ -36,7 +36,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldShowPostPage() throws Exception {
-        mockMvc.perform(get("/post?id=1"))
+        mockMvc.perform(get("/posts/1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("post"))
                 .andExpect(model().attributeDoesNotExist("comment"));
@@ -45,7 +45,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldShowCommentFormWhenAuthorized() throws Exception {
-        mockMvc.perform(get("/post?id=1").with(userBob()))
+        mockMvc.perform(get("/posts/1").with(userBob()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("post"))
                 .andExpect(model().attribute("comment", instanceOf(Comment.class)));
@@ -54,14 +54,14 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldReturn404WhenPostNotExists() throws Exception {
-        mockMvc.perform(get("/post?id=999"))
+        mockMvc.perform(get("/posts/999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldShowCreatePostPageIfAdmin() throws Exception {
-        mockMvc.perform(get("/post/create").with(userAdmin()))
+        mockMvc.perform(get("/posts/create").with(userAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editpost"))
                 .andExpect(model().attribute("post", instanceOf(PostEditDto.class)))
@@ -71,21 +71,21 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldDenyCreatePostIfNotAdmin() throws Exception {
-        mockMvc.perform(get("/post/create"))
+        mockMvc.perform(get("/posts/create"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("**/login"));
 
-        mockMvc.perform(get("/post/create").with(userBob()))
+        mockMvc.perform(get("/posts/create").with(userBob()))
                 .andExpect(status().isForbidden());
 
-        mockMvc.perform(post("/post/create").with(userBob()).with(csrf()))
+        mockMvc.perform(post("/posts/create").with(userBob()).with(csrf()))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldReturnAddPostFormWithErrorsWhenSubmittedInvalidPost() throws Exception {
-        mockMvc.perform(post("/post/create").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/create").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("post", "title"))
@@ -95,7 +95,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
         String title = "post title";
         String text = "too short";
 
-        mockMvc.perform(post("/post/create").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/create").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("title", title)
                 .param("text", text))
@@ -114,7 +114,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
         String text = "new post short text===cut===new post full text Lorem ipsum";
         String tags = "c++, java, hello world";
 
-        mockMvc.perform(post("/post/create").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/create").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("title", title)
                 .param("text", text)
@@ -126,7 +126,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
         String text2 = "new post 2 text Lorem ipsum dolor sit amet, consectetur adipiscing elit";
         String tags2 = "java";
 
-        mockMvc.perform(post("/post/create").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/create").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("title", title)
                 .param("text", text2)
@@ -139,7 +139,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldShowEditPostPageIfAdmin() throws Exception {
-        mockMvc.perform(get("/post/edit?id=1").with(userAdmin()))
+        mockMvc.perform(get("/posts/1/edit").with(userAdmin()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editpost"))
                 .andExpect(model().attribute("post", hasProperty("id", is(Matchers.equalTo(1L)))))
@@ -149,21 +149,21 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldDenyEditPostIfNotAdmin() throws Exception {
-        mockMvc.perform(get("/post/edit?id=1"))
+        mockMvc.perform(get("/posts/1/edit"))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrlPattern("**/login"));
 
-        mockMvc.perform(get("/post/edit?id=1").with(userBob()))
+        mockMvc.perform(get("/posts/1/edit").with(userBob()))
                 .andExpect(status().isForbidden());
 
-        mockMvc.perform(post("/post/edit?id=1").with(userBob()).with(csrf()))
+        mockMvc.perform(post("/posts/1/edit").with(userBob()).with(csrf()))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @ExpectedDatabase("data.xml")
     public void shouldReturnEditPostFormWithErrorsWhenSubmittedInvalidPost() throws Exception {
-        mockMvc.perform(post("/post/edit?id=1").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/1/edit").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeHasFieldErrors("post", "title"))
@@ -174,7 +174,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
         String title = "post title";
         String text = "too short";
 
-        mockMvc.perform(post("/post/edit?id=1").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/1/edit").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("title", title)
                 .param("text", text))
@@ -194,25 +194,25 @@ public class PostsControllerIT extends AbstractIntegrationTest {
         String text = "edited Lorem ipsum dolor sit amet, consectetur adipiscing elit";
         String tags = "c, c++, c#";
 
-        mockMvc.perform(post("/post/edit?id=1").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/1/edit").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("title", title)
                 .param("text", text)
                 .param("tags", tags))
                 .andExpect(status().isFound())
                 .andExpect(model().hasNoErrors())
-                .andExpect(view().name("redirect:/post?id=1"));
+                .andExpect(view().name("redirect:/posts/1"));
 
         String text2 = "edited short===cut===edited Lorem ipsum dolor sit amet, consectetur adipiscing elit";
         String tags2 = "c++, meow";
 
-        mockMvc.perform(post("/post/edit?id=2").with(userAdmin()).with(csrf())
+        mockMvc.perform(post("/posts/2/edit").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("title", title)
                 .param("text", text2)
                 .param("tags", tags2))
                 .andExpect(status().isFound())
                 .andExpect(model().hasNoErrors())
-                .andExpect(view().name("redirect:/post?id=2"));
+                .andExpect(view().name("redirect:/posts/2"));
     }
 }

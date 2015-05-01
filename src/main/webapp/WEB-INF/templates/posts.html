@@ -19,7 +19,7 @@
     </div>
 
     <div class="post" th:each="post, iterStat : ${postsPage.getContent()}">
-        <a class="h2 post-title" th:text="${post.title}" th:href="@{/post(id=${post.id})}"></a>
+        <a class="h2 post-title" th:text="${post.title}" th:href="@{|/posts/${post.id}|}"></a>
         <p class="post-date" th:text="${#dates.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>
 
         <div class="post-tags">
@@ -29,13 +29,13 @@
         <div class="post-content" th:utext="${post.hasShortTextPart()}? ${post.shortTextPartHtml()} : ${post.fullPostTextHtml()}"></div>
 
         <div th:if="${post.hasShortTextPart()}">
-            <a class="lead" th:href="@{/post(id=${post.id})}">Continue &rarr;</a>
+            <a class="lead" th:href="@{|/posts/${post.id}|}">Continue &rarr;</a>
         </div>
 
         <div class="post-actions">
-            <a th:href="@{/post(id=${post.id})} + '#comments'"
+            <a th:href="@{|/posts/${post.id}#comments|}"
                th:text="${post.comments.size() == 0} ? 'comments' : (${post.comments.size()} + ' comment' + (${post.comments.size() &gt; 1} ? 's' : ''))"></a>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/post/edit(id=${post.id})}">edit</a>
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{|/posts/${post.id}/edit|}">edit</a>
         </div>
     </div>
 

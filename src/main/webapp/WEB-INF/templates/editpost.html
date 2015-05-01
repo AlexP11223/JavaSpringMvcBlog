@@ -94,7 +94,7 @@
     <div class="col-sm-8">
         <h2 th:text="${edit} ? 'Edit post' : 'Create post'"></h2>
 
-        <form th:action="${edit} ? @{/post/edit(id=${post.id})} : @{/post/create}" th:object="${post}" method="post" id="postForm">
+        <form th:action="${edit} ? @{|/posts/${post.id}/edit|} : @{/posts/create}" th:object="${post}" method="post" id="postForm">
             <div th:if="${#fields.hasErrors('*')}">
                 <ul class="list-no-indent">
                     <li class="error-line" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
