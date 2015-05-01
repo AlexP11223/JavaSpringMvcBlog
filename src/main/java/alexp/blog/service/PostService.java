@@ -1,6 +1,7 @@
 package alexp.blog.service;
 
 import alexp.blog.model.Post;
+import alexp.blog.model.PostEditDto;
 import org.springframework.data.domain.Page;
 
 public interface PostService {
@@ -9,5 +10,9 @@ public interface PostService {
 
     Post getPost(Long id);
 
-    void saveNewPost(Post post, String tagstext);
+    PostEditDto getEditablePost(Long id);
+
+    Post saveNewPost(PostEditDto postEditDto);
+
+    Post updatePost(PostEditDto postEditDto);
 }

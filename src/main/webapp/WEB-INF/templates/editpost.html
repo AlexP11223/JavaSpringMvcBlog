@@ -60,7 +60,7 @@
             });
 
             $('#insertSeparator').click(function(){
-                $textarea = $('#wmd-input');
+                var $textarea = $('#wmd-input');
                 $textarea.insertAtCaret('===cut===');
             });
 
@@ -70,10 +70,10 @@
                         required: true,
                         minlength: 3
                     },
-                    tagstext: {
+                    tags: {
                         required: true
                     },
-                    fullPostText: {
+                    text: {
                         required: true,
                         minlength: 50
                     }
@@ -83,9 +83,9 @@
     </script>
 
     <div class="col-sm-8">
-        <h2>Create post</h2>
+        <h2 th:text="${edit} ? 'Edit post' : 'Create post'"></h2>
 
-        <form th:action="@{/post/create}" th:object="${post}" method="post" id="postForm">
+        <form th:action="${edit} ? @{/post/edit(id=${post.id})} : @{/post/create}" th:object="${post}" method="post" id="postForm">
             <div th:if="${#fields.hasErrors('*')}">
                 <ul class="list-no-indent">
                     <li class="error-line" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
@@ -99,16 +99,16 @@
 
             <div class="form-group wmd-panel">
                 <div id="wmd-button-bar"></div>
-                <textarea class="wmd-input" id="wmd-input" th:field="*{fullPostText}"></textarea>
+                <textarea class="wmd-input" id="wmd-input" th:field="*{text}"></textarea>
                 <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
             </div>
 
             <div class="form-group">
                 <label for="tags">Tags:</label>
-                <input type="text" class="form-control" id="tags" placeholder="c++, php" name="tagstext"/>
+                <input type="text" class="form-control" id="tags" th:field="*{tags}" placeholder="c++, php"/>
             </div>
 
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-default" th:text="${edit} ? 'Save' : 'Submit'"></button>
 
         </form>
     </div>

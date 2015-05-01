@@ -1,6 +1,7 @@
 package alexp.blog.service;
 
 import alexp.blog.model.Post;
+import alexp.blog.model.PostEditDto;
 import alexp.blog.model.Tag;
 import alexp.blog.repository.PostRepository;
 import alexp.blog.repository.TagRepository;
@@ -11,12 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -96,6 +98,27 @@ public class PostServiceTest {
     }
 
     @Test
+    public void shouldGetPostEditDto() {
+        final long postId = 1L;
+
+        Post post = new Post();
+        post.setId(postId);
+        post.setFullPostText("post text");
+        post.getTags().add(new Tag("c++"));
+        post.getTags().add(new Tag("hello world"));
+
+        when(postRepository.findOne(postId)).thenReturn(post);
+
+        PostEditDto retrievedPost = postService.getEditablePost(postId);
+
+        assertThat(retrievedPost.getText(), is(equalTo(post.getFullPostText())));
+        assertThat(retrievedPost.getTitle(), is(equalTo(post.getTitle())));
+        assertThat(retrievedPost.getTags(), is(equalTo("c++, hello world")));
+
+        verify(postRepository, times(1)).findOne(postId);
+    }
+
+    @Test
     public void shouldReturnNullWhenPostNotExists() {
         final long postId = 1L;
 
@@ -107,13 +130,12 @@ public class PostServiceTest {
     }
 
     @Test
-    public void shouldAddNewPostAndSetTags() {
-        Post post = new Post();
-        post.setFullPostText("short text " + Post.shortPartSeparator() + " full text");
+    public void shouldAddNewPost() {
+        PostEditDto postEditDto = new PostEditDto();
+        postEditDto.setText("short text " + Post.shortPartSeparator() + " full text");
+        postEditDto.setTags("c++, hello world");
 
-        String tags = "c++, hello world";
-
-        postService.saveNewPost(post, tags);
+        Post post = postService.saveNewPost(postEditDto);
 
         assertThat(post.getShortTextPart(), containsString("short text"));
         assertThat(post.getShortTextPart(), not(containsString("full text")));
@@ -123,7 +145,61 @@ public class PostServiceTest {
         assertThat(post.getTags().size(), is(equalTo(2)));
 
         verify(tagRepository, times(2)).findByNameIgnoreCase(Matchers.anyString());
-        verify(tagRepository, times(2)).save(Matchers.any(Tag.class));
+
+        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
+    }
+
+    @Test
+    public void shouldEditPost() {
+        Date dt = new GregorianCalendar(2015, Calendar.DECEMBER, 1, 12, 30, 0).getTime();
+
+        Long postId = 1L;
+
+        Post oldPost = new Post();
+        oldPost.setId(postId);
+        oldPost.setDateTime(dt);
+        oldPost.getTags().add(new Tag("tag"));
+
+        PostEditDto postEditDto = new PostEditDto();
+        postEditDto.setId(postId);
+        postEditDto.setText("short text " + Post.shortPartSeparator() + " full text");
+        postEditDto.setTags("c++, hello world");
+
+        when(postRepository.findOne(postId)).thenReturn(oldPost);
+
+        Post post = postService.updatePost(postEditDto);
+
+        assertThat(post.getShortTextPart(), containsString("short text"));
+        assertThat(post.getShortTextPart(), not(containsString("full text")));
+
+        assertThat(post.getFullPostText(), allOf(containsString("full text"), containsString("full text"), containsString(Post.shortPartSeparator())));
+
+        assertThat(post.getTags().size(), is(equalTo(2)));
+
+        assertThat(post.getDateTime(), is(dt));
+
+        verify(tagRepository, times(2)).findByNameIgnoreCase(Matchers.anyString());
+
+        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
+    }
+
+    @Test
+    public void shouldClearShortPartWhenItRemovedDuringEditing() {
+        Long postId = 1L;
+
+        Post oldPost = new Post();
+        oldPost.setId(postId);
+
+        PostEditDto postEditDto = new PostEditDto();
+        postEditDto.setId(postId);
+        postEditDto.setText("text");
+
+        when(postRepository.findOne(postId)).thenReturn(oldPost);
+
+        Post post = postService.updatePost(postEditDto);
+
+        assertThat(post.getShortTextPart(), isEmptyOrNullString());
+        assertThat(post.getFullPostText(), is(equalTo("text")));
 
         verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
     }

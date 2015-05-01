@@ -2,6 +2,7 @@ package alexp.blog.controller;
 
 import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
+import alexp.blog.model.PostEditDto;
 import alexp.blog.service.PostService;
 import alexp.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,13 @@ public class PostsController {
     }
 
     @RequestMapping(value = "/tag", method = RequestMethod.GET)
-    public @ResponseBody String searchByTag(@RequestParam(value = "name") String tagName, ModelMap model) {
+    public @ResponseBody String searchByTag(@RequestParam("name") String tagName, ModelMap model) {
 
         return "search by tag: TODO";
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.GET)
-    public String showPost(@RequestParam(value = "id") Long postId, ModelMap model) {
+    public String showPost(@RequestParam("id") Long postId, ModelMap model) {
         Post post = postService.getPost(postId);
 
         if (post == null)
@@ -56,33 +57,56 @@ public class PostsController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/post/create", method = RequestMethod.GET)
     public String showCreatePostForm(ModelMap model) {
-        model.addAttribute("post", new Post());
+        model.addAttribute("post", new PostEditDto());
 
         model.addAttribute("edit", false);
 
-        return "createpost";
+        return "editpost";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/post/create", method = RequestMethod.POST)
-    public String createPost(ModelMap model, @Valid @ModelAttribute(value = "post") Post post, BindingResult result,
-                             @RequestParam(value = "tagstext", defaultValue = "") String tagstext) {
+    public String createPost(ModelMap model, @Valid @ModelAttribute("post") PostEditDto post, BindingResult result) {
         if (result.hasErrors()) {
             model.addAttribute("edit", false);
 
-            return "createpost";
+            return "editpost";
         }
 
-        postService.saveNewPost(post, tagstext);
+        postService.saveNewPost(post);
 
         return "redirect:/posts";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/post/edit", method = RequestMethod.GET)
-    public String showEditPostForm(ModelMap model) {
+    public String showEditPostForm(@RequestParam("id") Long postId, ModelMap model) {
+        PostEditDto post = postService.getEditablePost(postId);
+
+        if (post == null)
+            throw new ResourceNotFoundException();
+
+        model.addAttribute("post", post);
+
         model.addAttribute("edit", true);
 
-        return "createpost";
+        return "editpost";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/post/edit", method = RequestMethod.POST)
+    public String showEditPostForm(ModelMap model, @Valid @ModelAttribute("post") PostEditDto post, BindingResult result,
+                                   @RequestParam("id") Long postId) {
+        post.setId(postId);
+
+        if (result.hasErrors()) {
+            model.addAttribute("edit", true);
+
+            return "editpost";
+        }
+
+        postService.updatePost(post);
+
+        return "redirect:/post?id=" + postId;
     }
 }

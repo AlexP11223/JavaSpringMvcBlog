@@ -18,6 +18,13 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private Collection<Post> posts = new ArrayList<>();
 
+    public Tag() {
+    }
+
+    public Tag(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return Id;
     }

@@ -123,6 +123,10 @@
         </div>
 
         <div class="post-content" th:utext="${post.fullPostTextHtml()}"></div>
+
+        <div class="post-actions">
+            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/post/edit(id=${post.id})}">edit</a>
+        </div>
     </div>
 
     <div class="comments">

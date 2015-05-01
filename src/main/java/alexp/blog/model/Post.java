@@ -21,12 +21,6 @@ public class Post {
     private Long Id;
 
     @Column(length = 250, nullable = false)
-    // haven't figured out how to specify messages for Size.List in the messages file
-    @Size.List({
-            @Size(min = 3, message = "Title too short"),
-            @Size(max = 250, message = "Title too long")
-    })
-    @NotBlank
     private String title;
 
     @Lob
@@ -34,15 +28,13 @@ public class Post {
 
     @Lob
     @Column(nullable = false)
-    @NotBlank
-    @Size(min = 50)
     private String fullPostText;
 
     @Column(columnDefinition="DATETIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "posts_tags",
             joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
