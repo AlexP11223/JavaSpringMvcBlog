@@ -23,8 +23,8 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @RequestMapping(value = "/comments/show", method = RequestMethod.GET)
-    public String showComments(@RequestParam(value = "postid") Long postId, ModelMap model) {
+    @RequestMapping(value = "/posts/{postId}/comments", method = RequestMethod.GET)
+    public String showComments(@PathVariable("postId") Long postId, ModelMap model) {
         Post post = postService.getPost(postId);
 
         if (post == null)
@@ -38,9 +38,9 @@ public class CommentController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "/comment/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/posts/{postId}/comments/create", method = RequestMethod.POST)
     public @ResponseBody String addComment(@Valid @ModelAttribute(value = "comment") Comment comment, BindingResult result,
-                                           @RequestParam(value = "postid") Long postId) {
+                                           @PathVariable("postId") Long postId) {
         if (result.hasErrors()) {
             return result.getAllErrors().get(0).getDefaultMessage();
         }

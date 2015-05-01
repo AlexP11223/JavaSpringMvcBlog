@@ -23,7 +23,7 @@
 
     <script th:inline="javascript">
         $(document).ready(function() {
-            var commentsReloadUrl = /*[[@{/comments/show(postid=${post.id})}]]*/ '';
+            var commentsReloadUrl = /*[[@{|/posts/${post.id}/comments|}]]*/ '';
 
 
             if (location.hash == '#comments') {
@@ -132,7 +132,7 @@
     <div class="comments">
         <p class="lead">Comments</p>
 
-        <div id="commentList"  th:include="fragments/comments :: commentList (comments=${post.getComments()})"></div>
+        <div id="commentList" th:include="fragments/comments :: commentList (comments=${post.getComments()})"></div>
 
         <div class="col-sm-8 comment-form">
             <p class="lead">Add a comment</p>
@@ -143,7 +143,7 @@
 
             <th:block th:if="${#authorization.expression('isAuthenticated()')}">
                 <div>
-                    <form th:action="@{/comment/add}" th:object="${comment}" method="post" id="commentForm">
+                    <form th:action="@{|/posts/${post.id}/comments/create|}" th:object="${comment}" method="post" id="commentForm">
                         <div th:if="${#fields.hasErrors('*')}">
                             <ul class="list-no-indent">
                                 <li class="error-line" th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
@@ -155,8 +155,6 @@
                             <textarea class="wmd-input" id="wmd-input" th:field="*{commentText}"></textarea>
                             <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
                         </div>
-
-                        <input type="hidden" th:value="${post.id}" name="postid"/>
 
                         <button type="submit" class="btn btn-default">Submit</button>
 
