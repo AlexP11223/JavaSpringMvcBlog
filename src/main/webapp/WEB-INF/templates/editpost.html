@@ -79,6 +79,15 @@
                     }
                 }
             });
+
+            $(window).bind('beforeunload', function(){
+                if ($.trim($('#wmd-input').val()) != '')
+                    return 'You have not submitted your post.';
+            });
+
+            $(document).on("submit", "form", function(event){
+                $(window).off('beforeunload');
+            });
         });
     </script>
 
