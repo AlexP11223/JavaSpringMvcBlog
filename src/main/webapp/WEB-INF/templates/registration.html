@@ -7,91 +7,15 @@
       layout:decorator="layouts/blog">
 
 <head>
+    <script src="../../js/registration.js" th:src="@{/js/registration.js}"></script>
 </head>
 
 <body>
 
 <section layout:fragment="content">
     <script th:inline="javascript">
-        $().ready(function() {
-            var emailCheckUrl = /*[[@{/check_email}]]*/ '';
-            var usernameCheckUrl = /*[[@{/check_username}]]*/ '';
-
-            $.validator.methods._remote = $.validator.methods.remote;
-            var timer = 0;
-            $.validator.methods.remote = function () {
-                clearTimeout(timer);
-
-                var args = arguments;
-
-                timer = setTimeout(function() {
-                    $.validator.methods._remote.apply(this, args);
-                }.bind(this), 500);
-
-                return "pending";
-            };
-
-            $("#regForm").validate({
-                rules: {
-                    username: {
-                        required: true,
-                        minlength: 3,
-                        remote: {
-                            url: usernameCheckUrl,
-                            type: "get",
-                            data: {
-                                username: function () {
-                                    return $("#username").val();
-                                }
-                            }
-                        }
-                    },
-                    email: {
-                        required: true,
-                        remote: {
-                            url: emailCheckUrl,
-                            type: "get",
-                            data: {
-                                email: function () {
-                                    return $("#email").val();
-                                }
-                            }
-                        }
-                    },
-                    password: {
-                        required: true,
-                        minlength: 6
-                    },
-                    password2: {
-                        required: true,
-                        equalTo: "#password"
-                    }
-                },
-                messages: {
-                    username: {
-                        required: "Enter username",
-                        minlength: "Too short username",
-                        remote: function (params) {
-                            return "Username " + params + " already registered. Have you already registered? Contact admin if you forgot your password";
-                        }
-                    },
-                    email: {
-                        required: "Enter e-mail",
-                        remote: function (params) {
-                            return "Email " + params + " already registered. Have you already registered? Contact admin if you forgot your password";
-                        }
-                    },
-                    password: {
-                        required: "Enter password",
-                        minlength: "Password too short"
-                    },
-                    password2: {
-                        required: "Enter password",
-                        equalTo: "Passwords do not match"
-                    }
-                }
-            });
-        });
+        window.emailCheckUrl = /*[[@{/check_email}]]*/ '';
+        window.usernameCheckUrl = /*[[@{/check_username}]]*/ '';
     </script>
 
     <div class="col-sm-4">
