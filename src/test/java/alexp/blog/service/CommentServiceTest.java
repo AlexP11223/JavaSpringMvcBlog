@@ -44,7 +44,7 @@ public class CommentServiceTest {
     public void shouldGetComments() {
         post.setComments(Arrays.asList(new Comment(), new Comment()));
 
-        List<Comment> comments = post.getComments();
+        List<Comment> comments = commentService.getPostComments(post);
 
         assertThat(comments.size(), is(equalTo(2)));
 
@@ -53,7 +53,7 @@ public class CommentServiceTest {
 
     @Test
     public void shouldReturnNoComments() {
-        List<Comment> comments = post.getComments();
+        List<Comment> comments = commentService.getPostComments(post);
 
         assertThat(comments.size(), is(equalTo(0)));
 
