@@ -269,4 +269,26 @@ public class PostsControllerIT extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("ok"));
     }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyDeletePostIfNotAdmin() throws Exception {
+        mockMvc.perform(post("/posts/1/delete").with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/login"));
+
+        mockMvc.perform(post("/posts/1/delete").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @ExpectedDatabase("data-post-deleted.xml")
+    public void shouldDeletePost() throws Exception {
+        mockMvc.perform(post("/posts/1/delete").with(userAdmin()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+    }
 }

@@ -88,6 +88,15 @@ public class PostServiceImpl implements PostService
         postRepository.saveAndFlush(post);
     }
 
+    @Override
+    public void deletePost(Long postId) {
+        Post post = getPost(postId);
+
+        postRepository.delete(post);
+
+        postRepository.flush();
+    }
+
     private PostEditDto convertToPostEditDto(Post post) {
         PostEditDto postEditDto = new PostEditDto();
 

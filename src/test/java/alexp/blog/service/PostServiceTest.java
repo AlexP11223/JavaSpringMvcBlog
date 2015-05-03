@@ -268,7 +268,7 @@ public class PostServiceTest {
 
         assertThat(post.isHidden(), is(CoreMatchers.equalTo(true)));
 
-        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
+        verify(postRepository, times(1)).saveAndFlush(post);
     }
 
     @Test
@@ -284,6 +284,19 @@ public class PostServiceTest {
 
         assertThat(post.isHidden(), is(CoreMatchers.equalTo(false)));
 
-        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
+        verify(postRepository, times(1)).saveAndFlush(post);
+    }
+
+    @Test
+    public void shouldDeletePost() {
+        Long postId = 1L;
+
+        Post post = new Post();
+
+        when(postRepository.findOne(postId)).thenReturn(post);
+
+        postService.deletePost(postId);
+
+        verify(postRepository, times(1)).delete(post);
     }
 }

@@ -51,6 +51,10 @@
                 <a sec:authorize="hasRole('ROLE_ADMIN')" href="javascript:void(0)"
                    th:attr="data-action=${post.hidden} ? 'unhidePost' : 'hidePost', data-href=@{|/posts/${post.id}/|} + (${post.hidden} ? 'unhide' : 'hide')"
                    th:text="${post.hidden} ? 'unhide' : 'hide'"></a>
+
+                <a sec:authorize="hasRole('ROLE_ADMIN')" href="javascript:void(0)" th:style="${post.hidden} ? '' : 'display: none;'"
+                   th:attr="data-href=@{|/posts/${post.id}/delete|}"
+                   data-action="deletePost">delete forever</a>
             </div>
             <div class="postaction-loading-indicator" style="display: none">
                 <img  th:src="@{/images/ajax-loader.gif}" />

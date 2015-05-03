@@ -128,4 +128,12 @@ public class PostsController {
 
         return "ok";
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/posts/{postId}/delete", method = RequestMethod.POST)
+    public @ResponseBody String deletePost(@PathVariable("postId") Long postId) {
+        postService.deletePost(postId);
+
+        return "ok";
+    }
 }

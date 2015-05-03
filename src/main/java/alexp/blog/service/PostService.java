@@ -17,4 +17,6 @@ public interface PostService {
     Post updatePost(PostEditDto postEditDto);
 
     void setPostVisibility(Long postId, boolean hide);
+
+    void deletePost(Long postId);
 }
