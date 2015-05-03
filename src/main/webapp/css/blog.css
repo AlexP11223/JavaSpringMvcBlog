@@ -131,3 +131,8 @@ label.error {
 .comment-form {
     padding-left: 0;
 }
+
+.post-maincontent img {
+    max-width: 100%;
+    height: auto;
+}
