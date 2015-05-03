@@ -47,8 +47,16 @@ label.error {
     padding-top: 25px;
 }
 
+.modal {
+    margin-top: 25%;
+}
+
 .post {
-    padding-bottom: 50px;
+    margin-bottom: 50px;
+}
+
+.post-content {
+    position: relative;
 }
 
 .post-title {
@@ -71,8 +79,27 @@ label.error {
     margin: 2px 2px 2px 0;
 }
 
-.post-content {
+.post-maincontent {
     margin-top: 15px;
+}
+
+.hidden-post {
+    background-color: rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+}
+
+.hidden-post span {
+    display: inline-block;
+    font-size: 30px;
+    font-weight: bold;
+    color: lightblue;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .pager {

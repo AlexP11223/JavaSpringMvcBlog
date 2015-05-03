@@ -34,6 +34,9 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateTime;
 
+    @Column(nullable = false)
+    private boolean hidden = false;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "posts_tags",
             joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
@@ -114,5 +117,13 @@ public class Post {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 }

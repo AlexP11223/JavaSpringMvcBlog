@@ -11,10 +11,10 @@
     <users_roles user_id="2" role_id="1"/>
     <users_roles user_id="3" role_id="1"/>
 
-    <posts id="1" fullPostText="hello world text" title="hello title"/>
-    <posts id="2" shortTextPart="meow short" fullPostText="meow short ===cut=== text" title="meow title"/>
-    <posts id="3" shortTextPart="new post short text" fullPostText="new post short text===cut===new post full text Lorem ipsum" title="new post title"/>
-    <posts id="4" fullPostText="new post 2 text Lorem ipsum dolor sit amet, consectetur adipiscing elit" title="new post title"/>
+    <posts id="1" fullPostText="hello world text" title="hello title" hidden="0"/>
+    <posts id="2" shortTextPart="meow short" fullPostText="meow short ===cut=== text" title="meow title" hidden="0"/>
+    <posts id="3" shortTextPart="new post short text" fullPostText="new post short text===cut===new post full text Lorem ipsum" title="new post title" hidden="0"/>
+    <posts id="4" fullPostText="new post 2 text Lorem ipsum dolor sit amet, consectetur adipiscing elit" title="new post title" hidden="0"/>
 
     <tags id="1" name="c++"/>
     <tags id="2" name="hello world"/>

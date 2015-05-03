@@ -45,6 +45,9 @@ public class PostsController {
         if (post == null)
             throw new ResourceNotFoundException();
 
+        if (post.isHidden() && !userService.isAdmin())
+            throw new ResourceNotFoundException();
+
         model.addAttribute("post", post);
 
         if (userService.isAuthenticated()) {
@@ -95,7 +98,7 @@ public class PostsController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value = "/posts/{postId}/edit", method = RequestMethod.POST)
-    public String showEditPostForm(ModelMap model, @Valid @ModelAttribute("post") PostEditDto post, BindingResult result,
+    public String updatePost(ModelMap model, @Valid @ModelAttribute("post") PostEditDto post, BindingResult result,
                                    @PathVariable("postId") Long postId) {
         post.setId(postId);
 
@@ -108,5 +111,21 @@ public class PostsController {
         postService.updatePost(post);
 
         return "redirect:/posts/" + postId;
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/posts/{postId}/hide", method = RequestMethod.POST)
+    public @ResponseBody String hidePost(@PathVariable("postId") Long postId) {
+        postService.setPostVisibility(postId, true);
+
+        return "ok";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @RequestMapping(value = "/posts/{postId}/unhide", method = RequestMethod.POST)
+    public @ResponseBody String unhidePost(@PathVariable("postId") Long postId) {
+        postService.setPostVisibility(postId, false);
+
+        return "ok";
     }
 }

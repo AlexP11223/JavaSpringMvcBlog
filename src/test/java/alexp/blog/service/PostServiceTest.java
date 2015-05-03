@@ -5,6 +5,7 @@ import alexp.blog.model.PostEditDto;
 import alexp.blog.model.Tag;
 import alexp.blog.repository.PostRepository;
 import alexp.blog.repository.TagRepository;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
@@ -31,6 +32,9 @@ public class PostServiceTest {
     @Mock
     private TagRepository tagRepository;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private PostServiceImpl postService;
 
@@ -53,10 +57,10 @@ public class PostServiceTest {
         when(postRepository.findAll(Matchers.any(PageRequest.class)))
                 .thenReturn(new PageImpl<>(new ArrayList<>()));
 
-        when(postRepository.findAll(Matchers.eq(new PageRequest(0, pageSize, Sort.Direction.DESC, "dateTime"))))
+        when(postRepository.findByHiddenFalseOrHiddenIsNull(Matchers.eq(new PageRequest(0, pageSize, Sort.Direction.DESC, "dateTime"))))
                 .thenReturn(new PageImpl<>(posts.subList(0, 10)));
 
-        when(postRepository.findAll(new PageRequest(1, pageSize, Sort.Direction.DESC, "dateTime")))
+        when(postRepository.findByHiddenFalseOrHiddenIsNull(new PageRequest(1, pageSize, Sort.Direction.DESC, "dateTime")))
                 .thenReturn(new PageImpl<>(posts.subList(10, 15)));
 
         Page<Post> page1 = postService.getPostsPage(0, pageSize);
@@ -65,19 +69,37 @@ public class PostServiceTest {
         assertThat(page1.getNumberOfElements(), is(equalTo(10)));
         assertThat(page2.getNumberOfElements(), is(equalTo(5)));
 
-        verify(postRepository, times(2)).findAll(Matchers.any(PageRequest.class));
+        verify(postRepository, times(2)).findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class));
     }
 
     @Test
     public void shouldGetEmptyPostPage() {
-        when(postRepository.findAll(Matchers.any(PageRequest.class)))
+        when(postRepository.findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class)))
                 .thenReturn(new PageImpl<>(new ArrayList<>()));
 
         Page<Post> page = postService.getPostsPage(99, 10);
 
         assertThat(page.getNumberOfElements(), is(equalTo(0)));
 
+        verify(postRepository, times(1)).findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class));
+    }
+
+    @Test
+    public void shouldIncludeHiddenPostsIfAdmin() {
+        when(userService.isAdmin()).thenReturn(true);
+
+        postService.getPostsPage(1, 10);
+
         verify(postRepository, times(1)).findAll(Matchers.any(PageRequest.class));
+    }
+
+    @Test
+    public void shouldNotIncludeHiddenPostsIfNotAdmin() {
+        when(userService.isAdmin()).thenReturn(false);
+
+        postService.getPostsPage(1, 10);
+
+        verify(postRepository, times(1)).findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class));
     }
 
     @Test
@@ -143,6 +165,8 @@ public class PostServiceTest {
         assertThat(post.getFullPostText(), allOf(containsString("full text"), containsString("full text"), containsString(Post.shortPartSeparator())));
 
         assertThat(post.getTags().size(), is(equalTo(2)));
+
+        assertThat(post.isHidden(), CoreMatchers.is(equalTo(false)));
 
         verify(tagRepository, times(2)).findByNameIgnoreCase(Matchers.anyString());
 
@@ -227,6 +251,38 @@ public class PostServiceTest {
         assertThat(post.getShortTextPart(), not(containsString("full text")));
 
         assertThat(post.getFullPostText(), allOf(containsString("full text"), containsString(links)));
+
+        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
+    }
+
+    @Test
+    public void shouldHidePost() {
+        Long postId = 1L;
+
+        Post post = new Post();
+        post.setHidden(false);
+
+        when(postRepository.findOne(postId)).thenReturn(post);
+
+        postService.setPostVisibility(postId, true);
+
+        assertThat(post.isHidden(), is(CoreMatchers.equalTo(true)));
+
+        verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
+    }
+
+    @Test
+    public void shouldUnhidePost() {
+        Long postId = 1L;
+
+        Post post = new Post();
+        post.setHidden(true);
+
+        when(postRepository.findOne(postId)).thenReturn(post);
+
+        postService.setPostVisibility(postId, false);
+
+        assertThat(post.isHidden(), is(CoreMatchers.equalTo(false)));
 
         verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
     }

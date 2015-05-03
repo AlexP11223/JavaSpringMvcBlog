@@ -22,11 +22,19 @@ public class PostServiceImpl implements PostService
     private PostRepository postRepository;
 
     @Autowired
-    TagRepository tagRepository;
+    private TagRepository tagRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public Page<Post> getPostsPage(int pageNumber, int pageSize) {
-        return postRepository.findAll(new PageRequest(pageNumber, pageSize, Sort.Direction.DESC, "dateTime"));
+        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, Sort.Direction.DESC, "dateTime");
+
+        if (userService.isAdmin())
+            return postRepository.findAll(pageRequest);
+
+        return postRepository.findByHiddenFalseOrHiddenIsNull(pageRequest);
     }
 
     @Override
@@ -69,6 +77,15 @@ public class PostServiceImpl implements PostService
         postRepository.saveAndFlush(post);
 
         return post;
+    }
+
+    @Override
+    public void setPostVisibility(Long postId, boolean hide) {
+        Post post = getPost(postId);
+
+        post.setHidden(hide);
+
+        postRepository.saveAndFlush(post);
     }
 
     private PostEditDto convertToPostEditDto(Post post) {

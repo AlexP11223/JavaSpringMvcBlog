@@ -15,4 +15,6 @@ public interface PostService {
     Post saveNewPost(PostEditDto postEditDto);
 
     Post updatePost(PostEditDto postEditDto);
+
+    void setPostVisibility(Long postId, boolean hide);
 }

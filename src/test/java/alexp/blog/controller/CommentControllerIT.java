@@ -34,6 +34,25 @@ public class CommentControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
+    @ExpectedDatabase("data-post-hidden.xml")
+    @DatabaseSetup("data-post-hidden.xml")
+    public void shouldReturn404WhenPostIsHidden() throws Exception {
+        mockMvc.perform(get("/posts/1/comments"))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("/posts/1/comments").with(userBob()))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @ExpectedDatabase("data-post-hidden.xml")
+    @DatabaseSetup("data-post-hidden.xml")
+    public void shouldShowCommentsWhenPostIsHiddenAndAdmin() throws Exception {
+        mockMvc.perform(get("/posts/1/comments").with(userAdmin()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     @ExpectedDatabase("data.xml")
     public void shouldDenyCommentIfNotAuthorized() throws Exception {
         mockMvc.perform(post("/posts/1/comments/create").with(csrf())

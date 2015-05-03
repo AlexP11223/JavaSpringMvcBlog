@@ -11,8 +11,8 @@
     <users_roles user_id="2" role_id="1"/>
     <users_roles user_id="3" role_id="1"/>
 
-    <posts id="1" fullPostText="hello world text" title="hello title" dateTime="2015-04-01 12:00:00"/>
-    <posts id="2" shortTextPart="meow short" fullPostText="meow short ===cut=== text" title="meow title" dateTime="2015-04-01 13:00:00"/>
+    <posts id="1" fullPostText="hello world text" title="hello title" dateTime="2015-04-01 12:00:00" hidden="0"/>
+    <posts id="2" shortTextPart="meow short" fullPostText="meow short ===cut=== text" title="meow title" dateTime="2015-04-01 13:00:00" hidden="0"/>
 
     <tags id="1" name="c++"/>
     <tags id="2" name="hello world"/>

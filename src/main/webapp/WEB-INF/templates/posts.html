@@ -8,7 +8,7 @@
       layout:decorator="layouts/blog">
 
 <head>
-
+    <script sec:authorize="hasRole('ROLE_ADMIN')" src="../../js/admin.js" th:src="@{/js/admin.js}"></script>
 </head>
 
 <body>
@@ -18,24 +18,40 @@
         <h2 th:text="${tag}"></h2>
     </div>
 
-    <div class="post" th:each="post, iterStat : ${postsPage.getContent()}">
-        <a class="h2 post-title" th:text="${post.title}" th:href="@{|/posts/${post.id}|}"></a>
-        <p class="post-date" th:text="${#dates.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>
+    <div id="postsContainer">
+        <div th:attr="data-post-id=${post.id}, data-post-title=${post.title}" class="post" th:each="post, iterStat : ${postsPage.getContent()}">
+            <div class="post-content">
+                <a class="h2 post-title" th:text="${post.title}" th:href="@{|/posts/${post.id}|}"></a>
+                <p class="post-date" th:text="${#dates.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>
 
-        <div class="post-tags">
-            <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/tag(name=${tag.name})}"></a>
-        </div>
+                <div class="post-tags">
+                    <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/tag(name=${tag.name})}"></a>
+                </div>
 
-        <div class="post-content" th:utext="${post.hasShortTextPart()}? ${post.shortTextPartHtml()} : ${post.fullPostTextHtml()}"></div>
+                <div class="post-maincontent" th:utext="${post.hasShortTextPart()}? ${post.shortTextPartHtml()} : ${post.fullPostTextHtml()}"></div>
 
-        <div th:if="${post.hasShortTextPart()}">
-            <a class="lead" th:href="@{|/posts/${post.id}|}">Continue &rarr;</a>
-        </div>
+                <div th:if="${post.hasShortTextPart()}">
+                    <a class="lead" th:href="@{|/posts/${post.id}|}">Continue &rarr;</a>
+                </div>
 
-        <div class="post-actions">
-            <a th:href="@{|/posts/${post.id}#comments|}"
-               th:text="${post.comments.size() == 0} ? 'comments' : (${post.comments.size()} + ' comment' + (${post.comments.size() &gt; 1} ? 's' : ''))"></a>
-            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{|/posts/${post.id}/edit|}">edit</a>
+                <th:block th:if="${post.hidden}">
+                    <div class="hidden-post"><span>Not visible for users</span></div>
+                </th:block>
+            </div>
+
+            <div class="post-actions">
+                <a th:href="@{|/posts/${post.id}#comments|}"
+                   th:text="${post.comments.size() == 0} ? 'comments' : (${post.comments.size()} + ' comment' + (${post.comments.size() &gt; 1} ? 's' : ''))"></a>
+
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{|/posts/${post.id}/edit|}">edit</a>
+
+                <a sec:authorize="hasRole('ROLE_ADMIN')" href="javascript:void(0)"
+                   th:attr="data-action=${post.hidden} ? 'unhidePost' : 'hidePost', data-href=@{|/posts/${post.id}/|} + (${post.hidden} ? 'unhide' : 'hide')"
+                   th:text="${post.hidden} ? 'unhide' : 'hide'"></a>
+            </div>
+            <div class="postaction-loading-indicator" style="display: none">
+                <img  th:src="@{/images/ajax-loader.gif}" />
+            </div>
         </div>
     </div>
 

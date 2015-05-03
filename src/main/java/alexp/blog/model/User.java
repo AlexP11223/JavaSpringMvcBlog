@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -106,6 +105,16 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public boolean hasRole(String role) {
+        role = role.toUpperCase();
+
+        if (!role.startsWith("ROLE_"))
+            role = "ROLE_" + role;
+
+        final String finalRole = role;
+        return getRoles().stream().anyMatch(r -> r.getName().equals(finalRole));
     }
 
     @Override

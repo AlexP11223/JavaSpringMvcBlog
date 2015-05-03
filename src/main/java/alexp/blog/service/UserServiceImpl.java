@@ -97,6 +97,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isAdmin() {
+        User user = currentUser();
+
+        return user != null && user.hasRole("ROLE_ADMIN");
+    }
+
+    @Override
     public User currentUser() {
         if (!isAuthenticated())
             return null;

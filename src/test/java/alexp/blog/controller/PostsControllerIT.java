@@ -215,4 +215,58 @@ public class PostsControllerIT extends AbstractIntegrationTest {
                 .andExpect(model().hasNoErrors())
                 .andExpect(view().name("redirect:/posts/2"));
     }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyHidePostIfNotAdmin() throws Exception {
+        mockMvc.perform(post("/posts/1/hide").with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/login"));
+
+        mockMvc.perform(post("/posts/1/hide").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyUnhidePostIfNotAdmin() throws Exception {
+        mockMvc.perform(post("/posts/1/unhide").with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrlPattern("**/login"));
+
+        mockMvc.perform(post("/posts/1/unhide").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @ExpectedDatabase("data-post-hidden.xml")
+    public void shouldHidePost() throws Exception {
+        mockMvc.perform(post("/posts/1/hide").with(userAdmin()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+
+        mockMvc.perform(get("/posts/1"))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("/posts/1").with(userBob()))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("/posts/1").with(userAdmin()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    @DatabaseSetup("data-post-hidden.xml")
+    public void shouldUnhidePost() throws Exception {
+        mockMvc.perform(post("/posts/1/unhide").with(userAdmin()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+    }
 }

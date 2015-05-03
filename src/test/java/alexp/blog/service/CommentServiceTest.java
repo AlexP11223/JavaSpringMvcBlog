@@ -7,11 +7,8 @@ import alexp.blog.repository.CommentRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
-
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
