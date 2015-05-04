@@ -15,6 +15,10 @@ public interface UserService extends UserDetailsService {
 
     void register(User user);
 
+    void changeEmail(String newEmail, String currentPassword) throws AuthException;
+
+    void changePassword(String newPassword, String currentPassword) throws AuthException;
+
     void authenticate(User user);
 
     boolean isAuthenticated();

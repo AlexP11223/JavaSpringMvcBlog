@@ -4,6 +4,7 @@ import alexp.blog.model.User;
 import alexp.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -22,12 +23,20 @@ public class UserValidator implements Validator {
     public void validate(Object o, Errors errors) {
         User user = (User) o;
 
-        if (userService.usernameExists(user.getUsername())) {
-            errors.rejectValue("username", "Registered");
+        if (!StringUtils.isEmpty(user.getUsername())) {
+            if (userService.usernameExists(user.getUsername())) {
+                errors.rejectValue("username", "Registered");
+            }
         }
 
-        if (userService.emailExists(user.getEmail())) {
-            errors.rejectValue("email", "Registered");
+        if (!StringUtils.isEmpty(user.getEmail())) {
+            User currentUser = userService.currentUser();
+
+            if (currentUser == null || !currentUser.getEmail().equalsIgnoreCase(user.getEmail())) {
+                if (userService.emailExists(user.getEmail())) {
+                    errors.rejectValue("email", "Registered");
+                }
+            }
         }
     }
 }

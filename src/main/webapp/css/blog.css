@@ -47,6 +47,10 @@ label.error {
     padding-top: 25px;
 }
 
+.user-menu-item {
+    margin-bottom: 15px;
+}
+
 .modal {
     margin-top: 25%;
 }
@@ -135,4 +139,14 @@ label.error {
 .post-maincontent img {
     max-width: 100%;
     height: auto;
+}
+
+.settings-success {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+    background-color: #F4FCEE;
+    border: 2px solid #91E458;
+    font-weight: bold;
 }

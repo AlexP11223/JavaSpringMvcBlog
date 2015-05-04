@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+
+      layout:decorator="layouts/blog">
+
+<head>
+    <script src="../../js/settings.js" th:src="@{/js/settings.js}"></script>
+</head>
+
+<body>
+
+<section layout:fragment="content">
+    <div class="col-sm-6">
+
+        <div th:if="${success}" class="settings-success">
+            <img width="32" height="32" src="../../images/success-tick.png" th:src="@{/images/success-tick.png}"/>
+            <div th:if="${isEmailForm}">Email successfully changed</div>
+            <div th:if="${isPasswordForm}">Password successfully changed</div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Change email</div>
+            <div class="panel-body">
+                <form th:action="@{/change_email}" th:object="${user}" method="post" id="emailForm">
+                        <div th:if="${#fields.hasErrors('*')} and ${isEmailForm}">
+                            <ul class="list-no-indent">
+                                <li class="error-line" th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                            </ul>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="currentPassword">Current password:</label>
+                            <input type="password" class="form-control" id="currentPassword" name="currentPassword"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}"/>
+                        </div>
+
+                        <button type="submit" class="btn btn-default">Apply</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Change password</div>
+            <div class="panel-body">
+                <form th:action="@{/change_password}" th:object="${user}" method="post" id="passwordForm">
+                    <div th:if="${#fields.hasErrors('*')} and ${isPasswordForm}">
+                        <ul class="list-no-indent">
+                            <li class="error-line" th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="oldPassword">Current password:</label>
+                        <input type="password" class="form-control" id="oldPassword" name="currentPassword"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" class="form-control" id="password" th:field="*{password}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Repeat password:</label>
+                        <input type="password" class="form-control" id="password2" name="password2"/>
+                    </div>
+                    <button type="submit" class="btn btn-default">Apply</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

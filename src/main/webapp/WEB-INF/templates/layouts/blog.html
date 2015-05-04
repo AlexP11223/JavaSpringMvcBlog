@@ -75,9 +75,14 @@
                     </div>
 
                     <div class="user-menu">
-                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="user-menu-item" sec:authorize="hasRole('ROLE_ADMIN')">
                             <a th:href="@{/posts/create}" role="button" class="btn btn-primary">
                                 <span class="glyphicon glyphicon-pencil"></span> Create post
+                            </a>
+                        </div>
+                        <div class="user-menu-item">
+                            <a th:href="@{/settings}" role="button" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-cog"></span> Edit settings
                             </a>
                         </div>
                     </div>

@@ -80,6 +80,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changeEmail(String newEmail, String currentPassword) throws AuthException {
+        User user = currentUser();
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword()))
+            throw new AuthException("password does not match");
+
+        user.setEmail(newEmail);
+
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void changePassword(String newPassword, String currentPassword) throws AuthException {
+        User user = currentUser();
+
+        if (!passwordEncoder.matches(currentPassword, user.getPassword()))
+            throw new AuthException("password does not match");
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
     public void authenticate(User user) {
         UserDetails userDetails = loadUserByUsername(user.getUsername());
 
@@ -113,5 +137,13 @@ public class UserServiceImpl implements UserService {
         Authentication auth = securityContext.getAuthentication();
 
         return userRepository.findByUsernameIgnoreCase(auth.getName());
+    }
+
+    public PasswordEncoder getPasswordEncoder() {
+        return passwordEncoder;
+    }
+
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 }
