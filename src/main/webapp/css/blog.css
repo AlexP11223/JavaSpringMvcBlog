@@ -155,3 +155,21 @@ label.error {
     border: 2px solid #91E458;
     font-weight: bold;
 }
+
+.avatar {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.profile-info h3 {
+    margin-top: 0;
+}
+
+.website-link a {
+    word-wrap: break-word;
+}
+
+.reg-date {
+    margin-top: 15px;
+    color: #999;
+}

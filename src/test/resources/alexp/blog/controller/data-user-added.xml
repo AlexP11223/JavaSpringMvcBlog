@@ -1,6 +1,7 @@
 <dataset>
     <users id="1" username="admin" email="admin@gmail.com" enabled="1"/>
-    <users id="2" username="Alice" email="alice@gmail.com" enabled="1"/>
+    <users id="2" username="Alice" email="alice@gmail.com" enabled="1"
+           websiteLink="http://google.com" aboutText="about Alice"/>
     <users id="3" username="Bob" email="bob@gmail.com" enabled="1"/>
     <users id="4" username="newuser" email="newemail@gmail.com" enabled="1"/>
 

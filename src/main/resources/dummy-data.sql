@@ -1,9 +1,22 @@
 INSERT INTO roles(id, name) VALUES(1, 'ROLE_USER');
 INSERT INTO roles(id, name) VALUES(2, 'ROLE_ADMIN');
 
-INSERT INTO users(id, username, email, password, enabled) VALUES(1, 'admin', 'alex.pantec@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1);
-INSERT INTO users(id, username, email, password, enabled) VALUES(2, 'Alice', 'alice@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1);
-INSERT INTO users(id, username, email, password, enabled) VALUES(3, 'Bob', 'bob@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1);
+INSERT INTO users(id, username, email, password, enabled, registrationDate)
+    VALUES(1, 'admin', 'alex.pantec@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-01-01 00:00:01');
+INSERT INTO users(id, username, email, password, enabled, registrationDate, websiteLink, aboutText)
+    VALUES(2, 'Alice', 'alice@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-04-01 00:00:01',
+      'http://google.com', 'Hello!
+
+I am Alice and I **LOVE** cats!
+
+And programming.');
+INSERT INTO users(id, username, email, password, enabled, registrationDate, websiteLink, aboutText)
+    VALUES(3, 'Bob', 'bob@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-04-03 00:00:01',
+      'http://ya.ru', 'Hello.
+
+I am Bob and I am a C++ programmer.
+
+And that''s it about me. I don''t have time for anything else since I always staying late at work to catch all bugs while my Java-coworkers having fun with their friends and families.');
 
 INSERT INTO users_roles(user_id, role_id) VALUES(1, 1);
 INSERT INTO users_roles(user_id, role_id) VALUES(1, 2);

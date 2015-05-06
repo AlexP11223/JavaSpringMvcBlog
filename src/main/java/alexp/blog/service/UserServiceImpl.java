@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("userService")
@@ -76,6 +77,8 @@ public class UserServiceImpl implements UserService {
 
         user.setEnabled(true);
 
+        user.setRegistrationDate(new Date());
+
         userRepository.saveAndFlush(user);
     }
 
@@ -99,6 +102,17 @@ public class UserServiceImpl implements UserService {
             throw new AuthException("password does not match");
 
         user.setPassword(passwordEncoder.encode(newPassword));
+
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void changeProfileInfo(User newProfileInfo) {
+        User user = currentUser();
+
+        user.setAboutText(newProfileInfo.getAboutText());
+
+        user.setWebsiteLink(newProfileInfo.getWebsiteLink());
 
         userRepository.saveAndFlush(user);
     }

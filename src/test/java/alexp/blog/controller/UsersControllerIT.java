@@ -242,4 +242,75 @@ public class UsersControllerIT extends AbstractIntegrationTest {
 
         verify(passwordEncoder, times(1)).encode(password);
     }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldShowEditProfilePage() throws Exception {
+        mockMvc.perform(get("/edit_profile").with(userBob()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("editprofile"))
+                .andExpect(model().attribute("user", hasProperty("id", equalTo(3L))));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldNotShowEditProfilePageWhenNotAuthenticated() throws Exception {
+        mockMvc.perform(get("/edit_profile"))
+                .andExpect(status().isFound())
+                .andExpect(view().name(is(not(equalTo("editprofile")))));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldReturnEditProfileFormWithErrorsWhenSubmittedInvalidInput() throws Exception {
+        String url = "notlink";
+
+        mockMvc.perform(post("/edit_profile").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("websiteLink", url))
+                .andExpect(status().isOk())
+                .andExpect(view().name("editprofile"))
+                .andExpect(model().attributeHasFieldErrorCode("user", "websiteLink", "Pattern"))
+                .andExpect(model().errorCount(1));
+    }
+
+    @Test
+    @ExpectedDatabase("data-profile-changed.xml")
+    public void shouldEditProfile() throws Exception {
+        String url = "http://site.com";
+        String about = "new about";
+
+        mockMvc.perform(post("/edit_profile").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("websiteLink", url)
+                .param("aboutText", about))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/edit_profile"));
+    }
+
+    @Test
+    @DatabaseSetup("data-profile-changed.xml")
+    @ExpectedDatabase("data.xml")
+    public void shouldResetProfileInfo() throws Exception {
+        mockMvc.perform(post("/edit_profile").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:/edit_profile"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldShowProfilePage() throws Exception {
+        mockMvc.perform(get("/users/Bob").with(userBob()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("profile"))
+                .andExpect(model().attribute("user", hasProperty("id", equalTo(3L))));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldReturn404IfUserDoesNotExist() throws Exception {
+        mockMvc.perform(get("/users/notexisting").with(userBob()))
+                .andExpect(status().isNotFound());
+    }
 }

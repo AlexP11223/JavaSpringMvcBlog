@@ -19,6 +19,8 @@ public interface UserService extends UserDetailsService {
 
     void changePassword(String newPassword, String currentPassword) throws AuthException;
 
+    void changeProfileInfo(User newProfileInfo);
+
     void authenticate(User user);
 
     boolean isAuthenticated();

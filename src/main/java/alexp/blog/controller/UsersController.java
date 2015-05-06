@@ -93,7 +93,7 @@ public class UsersController {
     public String changeEmail(@Validated({User.ChangeEmailValidationGroup.class}) @ModelAttribute(value = "user") User user, BindingResult result,
                               @RequestParam("currentPassword") String currentPassword, RedirectAttributes redirectAttributes, ModelMap model) {
         model.addAttribute("isEmailForm", true);
-        
+
         user.setEmail(StringUtils.trimWhitespace(user.getEmail()));
 
         userValidator.validate(user, result);
@@ -142,5 +142,45 @@ public class UsersController {
         return "redirect:/settings";
     }
 
+    @RequestMapping(value = "/edit_profile", method = RequestMethod.GET)
+    public String showEditProfilePage(ModelMap model) {
+        if (!model.containsAttribute("user")) {
+            User user = userService.currentUser();
 
+            if (user == null) {
+                return "redirect:posts";
+            }
+
+            model.addAttribute("user", user);
+        }
+
+        return "editprofile";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/edit_profile", method = RequestMethod.POST)
+    public String editProfile(@Validated({User.ProfileInfoValidationGroup.class}) @ModelAttribute(value = "user") User user, BindingResult result,
+                              RedirectAttributes redirectAttributes, ModelMap model) {
+        if (result.hasErrors()) {
+            return "editprofile";
+        }
+
+        userService.changeProfileInfo(user);
+
+        redirectAttributes.addFlashAttribute("success", true);
+
+        return "redirect:/edit_profile";
+    }
+
+    @RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
+    public String showProfile(@PathVariable("username") String username, ModelMap model) {
+        User user = userService.findByUsername(username);
+
+        if (user == null)
+            throw new ResourceNotFoundException();
+
+        model.addAttribute("user", user);
+
+        return "profile";
+    }
 }

@@ -1,12 +1,15 @@
 package alexp.blog.model;
 
+import alexp.blog.service.MarkdownConverter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -16,6 +19,7 @@ public class User {
     public interface CreateValidationGroup {}
     public interface ChangeEmailValidationGroup {}
     public interface ChangePasswordValidationGroup {}
+    public interface ProfileInfoValidationGroup {}
 
     @Id
     @GeneratedValue
@@ -48,6 +52,9 @@ public class User {
     @Column(nullable = false)
     private boolean enabled;
 
+    @Column(nullable = false)
+    private Date registrationDate;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -55,7 +62,16 @@ public class User {
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-    public List<Comment> comments = new ArrayList<>();;
+    public List<Comment> comments = new ArrayList<>();
+
+    @Column(nullable = true, length = 1000)
+    @Size(max = 1000, groups = {ProfileInfoValidationGroup.class})
+    public String aboutText;
+
+    @Column(nullable = true, length = 80)
+    @Pattern(regexp = "^\\s*(https?:\\/\\/.+)?", groups = {ProfileInfoValidationGroup.class})
+    @Size(max = 80, groups = {ProfileInfoValidationGroup.class})
+    public String websiteLink;
 
     public Long getId() {
         return Id;
@@ -93,6 +109,14 @@ public class User {
         return enabled;
     }
 
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
     public List<Role> getRoles() {
         return roles;
     }
@@ -111,6 +135,31 @@ public class User {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getAboutText() {
+        return aboutText;
+    }
+
+    public String getAboutTextHtml() {
+        return StringUtils.isEmpty(aboutText) ? "" : MarkdownConverter.toHtml(aboutText);
+    }
+
+    public void setAboutText(String aboutText) {
+        this.aboutText = aboutText;
+    }
+
+    public String getWebsiteLink() {
+        return websiteLink;
+    }
+
+    public String getWebsiteLinkTitle() {
+        return StringUtils.isEmpty(websiteLink) ? "" :
+                StringUtils.trimTrailingCharacter(websiteLink.replace("https://", "").replace("http://", "").replace("www.", ""), '/');
+    }
+
+    public void setWebsiteLink(String websiteLink) {
+        this.websiteLink = websiteLink;
     }
 
     public boolean hasRole(String role) {
