@@ -44,6 +44,9 @@ public class UsersController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String registerUser(@Validated({User.CreateValidationGroup.class}) @ModelAttribute(value = "user") User user, BindingResult result, HttpSession session) {
+        user.setUsername(StringUtils.trimWhitespace(user.getUsername()));
+        user.setEmail(StringUtils.trimWhitespace(user.getEmail()));
+
         userValidator.validate(user, result);
 
         if (result.hasErrors())
