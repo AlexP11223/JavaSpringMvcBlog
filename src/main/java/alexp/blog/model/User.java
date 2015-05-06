@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class User {
             @Size(max = 25, message = "Username too long", groups = {CreateValidationGroup.class})
     })
     @NotBlank(groups = {CreateValidationGroup.class})
+    @Pattern(regexp = "^[\\p{L}0-9\\._\\- ]+$", groups = {CreateValidationGroup.class})
     private String username;
 
     @Column(unique = true, nullable = false, length = 50)

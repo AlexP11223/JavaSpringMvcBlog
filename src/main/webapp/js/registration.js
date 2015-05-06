@@ -15,11 +15,16 @@ $(document).ready(function() {
         return "pending";
     };
 
+    $.validator.addMethod("username", function(value, element) {
+        return this.optional( element ) || XRegExp("^[\\p{L}0-9\\._\\- ]+$").test( value );
+    }, 'Only letters, numbers, space, ".", "-" and "_" are allowed.');
+
     $("#regForm").validate({
         rules: {
             username: {
                 required: true,
                 minlength: 3,
+                username: true,
                 remote: {
                     url: window.usernameCheckUrl,
                     type: "get",
