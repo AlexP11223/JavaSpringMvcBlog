@@ -1,6 +1,8 @@
 package alexp.blog.service;
 
 import com.github.rjeschke.txtmark.Processor;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,11 @@ import java.util.regex.Pattern;
 public class MarkdownConverter {
 
     public static String toHtml(String input) {
-        return Processor.process(input, true);
+        String html = Processor.process(input, true);
+
+        String safeHtml = Jsoup.clean(html, Whitelist.basicWithImages());
+
+        return safeHtml;
     }
 
     public static List<String> extractLinks(String input) {

@@ -143,6 +143,14 @@
             <version>0.13</version>
         </dependency>
 
+        <!-- Jsoup -->
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.8.1</version>
+        </dependency>
+
         <!-- testing -->
 
         <dependency>
