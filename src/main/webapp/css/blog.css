@@ -19,6 +19,11 @@
     padding-right: 10px;
 }
 
+.no-padding-col {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .reg-link {
     margin-top: 10px;
     white-space: nowrap;
