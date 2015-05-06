@@ -93,6 +93,8 @@ public class UsersController {
     public String changeEmail(@Validated({User.ChangeEmailValidationGroup.class}) @ModelAttribute(value = "user") User user, BindingResult result,
                               @RequestParam("currentPassword") String currentPassword, RedirectAttributes redirectAttributes, ModelMap model) {
         model.addAttribute("isEmailForm", true);
+        
+        user.setEmail(StringUtils.trimWhitespace(user.getEmail()));
 
         userValidator.validate(user, result);
 
