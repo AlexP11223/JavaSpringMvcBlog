@@ -6,6 +6,7 @@ import alexp.blog.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void saveNewComment(Comment comment, Post post) {
-        comment.setDateTime(new Date());
+        comment.setDateTime(LocalDateTime.now());
 
         comment.setPost(post);
 

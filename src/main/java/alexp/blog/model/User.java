@@ -1,6 +1,7 @@
 package alexp.blog.model;
 
 import alexp.blog.service.MarkdownConverter;
+import alexp.blog.utils.LocalDateTimePersistenceConverter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.StringUtils;
@@ -8,6 +9,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +55,8 @@ public class User {
     private boolean enabled;
 
     @Column(nullable = false)
-    private Date registrationDate;
+    @Convert(converter = LocalDateTimePersistenceConverter.class)
+    private LocalDateTime registrationDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -109,11 +112,11 @@ public class User {
         return enabled;
     }
 
-    public Date getRegistrationDate() {
+    public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
 

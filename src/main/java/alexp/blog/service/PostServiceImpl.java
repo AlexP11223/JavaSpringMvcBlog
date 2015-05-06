@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +60,7 @@ public class PostServiceImpl implements PostService
 
         fillPost(post, postEditDto);
 
-        post.setDateTime(new Date());
+        post.setDateTime(LocalDateTime.now());
 
         postRepository.saveAndFlush(post);
 

@@ -22,7 +22,7 @@
         <div th:attr="data-post-id=${post.id}, data-post-title=${post.title}" class="post" th:each="post, iterStat : ${postsPage.getContent()}">
             <div class="post-content">
                 <a class="h2 post-title" th:text="${post.title}" th:href="@{|/posts/${post.id}|}"></a>
-                <p class="post-date" th:text="${#dates.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>
+                <p class="post-date" th:text="${#temporals.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>
 
                 <div class="post-tags">
                     <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/tag(name=${tag.name})}"></a>

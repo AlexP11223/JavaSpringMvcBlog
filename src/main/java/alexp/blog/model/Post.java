@@ -1,12 +1,14 @@
 package alexp.blog.model;
 
 import alexp.blog.service.MarkdownConverter;
+import alexp.blog.utils.LocalDateTimePersistenceConverter;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -30,9 +32,9 @@ public class Post {
     @Column(nullable = false)
     private String fullPostText;
 
-    @Column(columnDefinition="DATETIME", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateTime;
+    @Column(nullable = false)
+    @Convert(converter = LocalDateTimePersistenceConverter.class)
+    private LocalDateTime dateTime;
 
     @Column(nullable = false)
     private boolean hidden = false;
@@ -104,11 +106,11 @@ public class Post {
         this.tags = tags;
     }
 
-    public Date getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

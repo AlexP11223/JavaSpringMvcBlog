@@ -7,6 +7,8 @@ import alexp.blog.repository.CommentRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
+
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,6 +72,8 @@ public class CommentServiceTest {
         assertThat(comment.getPost(), is(equalTo(post)));
 
         assertThat(comment.getUser(), is(equalTo(user)));
+
+        assertThat(comment.getDateTime().toLocalDate().equals(LocalDate.now()), is(equalTo(true)));
 
         verify(commentRepository, times(1)).saveAndFlush(Matchers.any(Comment.class));
     }

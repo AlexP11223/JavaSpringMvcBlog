@@ -1,9 +1,11 @@
 package alexp.blog.model;
 
 import alexp.blog.service.MarkdownConverter;
+import alexp.blog.utils.LocalDateTimePersistenceConverter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -19,9 +21,9 @@ public class Comment {
     @NotBlank
     private String commentText;
 
-    @Column(columnDefinition="DATETIME", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateTime;
+    @Column(nullable = false)
+    @Convert(converter = LocalDateTimePersistenceConverter.class)
+    private LocalDateTime dateTime;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
@@ -47,11 +49,11 @@ public class Comment {
         return MarkdownConverter.toHtml(getCommentText());
     }
 
-    public Date getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

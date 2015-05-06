@@ -32,7 +32,7 @@
         <div th:attr="data-post-id=${post.id}, data-post-title=${post.title}" class="post">
             <div class="post-content">
                 <h2 class="post-title" th:text="${post.title}"></h2>
-                <p class="post-date" th:text="${#dates.format(post.dateTime, 'MMM dd, yyyy HH:mm:ss')}"></p>
+                <p class="post-date" th:text="${#temporals.format(post.dateTime, 'MMM dd, yyyy HH:mm:ss')}"></p>
 
                 <div class="post-tags">
                     <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/tag(name=${tag.name})}"></a>

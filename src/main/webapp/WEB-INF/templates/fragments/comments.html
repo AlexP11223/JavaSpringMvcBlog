@@ -10,7 +10,7 @@
     <th:block th:fragment="commentList">
         <div class="comment" th:each="comment : ${comments}">
             <a class="comment-title" th:href="@{|/users/${comment.user.username}|}" th:text="${comment.user.username}"></a>
-            <span class="post-date" th:text="${#dates.format(comment.dateTime, 'MMM dd, yyyy HH:mm')}"></span>
+            <span class="post-date" th:text="${#temporals.format(comment.dateTime, 'MMM dd, yyyy HH:mm')}"></span>
 
             <div class="comment-content" th:utext="${comment.getCommentTextHtml()}"></div>
         </div>

@@ -13,6 +13,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -168,6 +172,8 @@ public class PostServiceTest {
 
         assertThat(post.isHidden(), CoreMatchers.is(equalTo(false)));
 
+        assertThat(post.getDateTime().toLocalDate().equals(LocalDate.now()), is(equalTo(true)));
+
         verify(tagRepository, times(2)).findByNameIgnoreCase(Matchers.anyString());
 
         verify(postRepository, times(1)).saveAndFlush(Matchers.any(Post.class));
@@ -175,7 +181,7 @@ public class PostServiceTest {
 
     @Test
     public void shouldEditPost() {
-        Date dt = new GregorianCalendar(2015, Calendar.DECEMBER, 1, 12, 30, 0).getTime();
+        LocalDateTime dt = LocalDateTime.of(2015, Month.JANUARY, 1, 12, 30, 0);
 
         Long postId = 1L;
 

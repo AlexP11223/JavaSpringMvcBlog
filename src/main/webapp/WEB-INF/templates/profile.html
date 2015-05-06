@@ -29,7 +29,7 @@
             </div>
 
             <div class="reg-date">
-                <span th:text="'Registered ' + ${#dates.format(user.registrationDate, 'MMM dd, yyyy')}"></span>
+                <span th:text="'Registered ' + ${#temporals.format(user.registrationDate, 'MMM dd, yyyy')}"></span>
             </div>
         </div>
 

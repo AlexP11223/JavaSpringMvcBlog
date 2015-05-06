@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,6 +104,8 @@ public class UserServiceTest {
 
         assertThat(user.getRoles().size(), is(equalTo(1)));
         assertThat(user.getRoles().get(0), is(role));
+
+        assertThat(user.getRegistrationDate().toLocalDate().equals(LocalDate.now()), is(equalTo(true)));
 
         verify(userRepository, times(1)).saveAndFlush(user);
 
