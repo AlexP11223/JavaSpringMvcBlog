@@ -150,8 +150,8 @@ label.error {
     color: #808080;
 }
 
-.comment-form {
-    padding-left: 0;
+.comment-form button {
+    margin-right: 10px;
 }
 
 .post-maincontent img {

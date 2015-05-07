@@ -55,6 +55,14 @@ public class CommentControllerIT extends AbstractIntegrationTest {
 
     @Test
     @ExpectedDatabase("data.xml")
+    public void shouldGetCommentSource() throws Exception {
+        mockMvc.perform(get("/posts/1/comments/3/source").with(userBob()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("comment3 text"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
     public void shouldDenyCommentIfNotAuthorized() throws Exception {
         mockMvc.perform(post("/posts/1/comments/create").with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
@@ -126,6 +134,65 @@ public class CommentControllerIT extends AbstractIntegrationTest {
     public void shouldAllowDeleteAnyCommentIfAdmin() throws Exception {
         mockMvc.perform(post("/posts/1/comments/3/delete").with(userAdmin()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyEditOtherUserComment() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/3/edit").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("commentText", "new comment text"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyEditCommentIfExpired() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/3/edit").with(userAlice()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("commentText", "new comment text"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("expired"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldReturnErrorWhenSubmittedInvalidEditComment() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/3/edit").with(userAdmin()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(equalTo("ok"))));
+    }
+
+    @Test
+    @ExpectedDatabase(value = "data-comment-added-and-edited.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @DatabaseTearDown(value = "data.xml", type = DatabaseOperation.TRUNCATE_TABLE) // to reset id sequence, otherwise other tests that insert comments will fail on ExpectedDatabase
+    public void shouldEditComment() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/create").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("commentText", "new comment text"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+
+        String text = "edited text";
+
+        mockMvc.perform(post("/posts/1/comments/4/edit").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("commentText", text))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+    }
+
+    @Test
+    @ExpectedDatabase("data-comment-edited.xml")
+    public void shouldAllowEditedAnyCommentIfAdmin() throws Exception {
+        String text = "edited text";
+
+        mockMvc.perform(post("/posts/1/comments/3/edit").with(userAdmin()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("commentText", text))
                 .andExpect(status().isOk())
                 .andExpect(content().string("ok"));
     }

@@ -79,4 +79,33 @@ public class CommentController {
         return "ok";
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/posts/{postId}/comments/{commentId}/edit", method = RequestMethod.POST)
+    public @ResponseBody String editComment(@Valid @ModelAttribute(value = "comment") Comment comment, BindingResult result,
+                                            @PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
+        if (result.hasErrors()) {
+            return result.getAllErrors().get(0).getDefaultMessage();
+        }
+
+        try {
+            commentService.updateComment(comment, commentId);
+        } catch (ActionExpiredException e) {
+            return "expired";
+        }
+
+        return "ok";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/posts/{postId}/comments/{commentId}/source", method = RequestMethod.GET,
+            produces = "text/plain; charset=utf-8")
+    public @ResponseBody String getCommentSource(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
+        Comment comment = commentService.getComment(commentId);
+
+        if (comment == null)
+            throw new ResourceNotFoundException();
+
+        return comment.getCommentText();
+    }
+
 }

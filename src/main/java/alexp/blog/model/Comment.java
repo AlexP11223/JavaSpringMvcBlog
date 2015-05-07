@@ -6,7 +6,6 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.time.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "comments")
@@ -41,13 +40,25 @@ public class Comment {
     }
 
     public LocalDateTime maxDeleteTime() {
-        return dateTime.plusMinutes(2);
+        return dateTime.plusMinutes(10);
     }
 
     // should refactor to store dates in UTC in database
 
     public long maxDeleteTimeUnixTimestamp() {
         return maxDeleteTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    public boolean userCanEdit() {
+        return LocalDateTime.now().isBefore(maxEditTime());
+    }
+
+    public LocalDateTime maxEditTime() {
+        return dateTime.plusMinutes(180);
+    }
+
+    public long maxEditTimeUnixTimestamp() {
+        return maxEditTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 
     public Long getId() {

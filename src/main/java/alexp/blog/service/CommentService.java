@@ -14,4 +14,6 @@ public interface CommentService {
     void saveNewComment(Comment comment, Post post);
 
     void deleteComment(Long commentId) throws ActionExpiredException;
+
+    void updateComment(Comment newCommentData, Long commentId) throws ActionExpiredException;
 }

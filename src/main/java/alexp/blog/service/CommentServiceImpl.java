@@ -59,4 +59,23 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.saveAndFlush(comment);
     }
+
+    @Override
+    public void updateComment(Comment newCommentData, Long commentId) throws ActionExpiredException {
+        Comment comment = getComment(commentId);
+
+        boolean isAdmin = userService.isAdmin();
+
+        if (!isAdmin && !userService.currentUser().getUsername().equals(comment.getUser().getUsername())) {
+            throw new ForbiddenException();
+        }
+
+        if (!isAdmin && !comment.userCanEdit()) {
+            throw new ActionExpiredException("edit time exceeded");
+        }
+
+        comment.setCommentText(newCommentData.getCommentText());
+
+        commentRepository.saveAndFlush(comment);
+    }
 }

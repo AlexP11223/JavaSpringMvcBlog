@@ -8,7 +8,7 @@
 
 <body>
     <th:block th:fragment="commentList">
-        <div class="comment" th:each="comment : ${comments}">
+        <div class="comment" th:attr="data-commentId=${comment.id}" th:each="comment : ${comments}">
             <a th:unless="${comment.deleted}" class="comment-title" th:href="@{|/users/${comment.user.username}|}" th:text="${comment.user.username}"></a>
             <span th:if="${comment.deleted}" class="deleted">[deleted]</span>
 
@@ -20,6 +20,12 @@
 
             <div class="post-actions" th:if="${#authorization.expression('isAuthenticated()')}">
                 <th:block th:unless="${comment.deleted}">
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.name == comment.user.username and comment.userCanEdit())}"
+                       href="javascript:void(0)"
+                       data-action="editComment"
+                       th:attr="data-href=@{|/posts/${post.id}/comments/${comment.id}/edit|},
+                           data-maxDate=(${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? '' : ${comment.maxEditTimeUnixTimestamp()})">edit</a>
+
                     <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.name == comment.user.username and comment.userCanDelete())}"
                        href="javascript:void(0)"
                        data-action="deleteComment"
