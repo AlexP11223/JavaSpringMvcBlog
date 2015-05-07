@@ -5,7 +5,7 @@ import alexp.blog.utils.LocalDateTimePersistenceConverter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.Date;
 
 @Entity
@@ -32,6 +32,23 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
+
+    public boolean userCanDelete() {
+        return LocalDateTime.now().isBefore(maxDeleteTime());
+    }
+
+    public LocalDateTime maxDeleteTime() {
+        return dateTime.plusMinutes(2);
+    }
+
+    // should refactor to store dates in UTC in database
+
+    public long maxDeleteTimeUnixTimestamp() {
+        return maxDeleteTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
 
     public Long getId() {
         return Id;
@@ -77,4 +94,11 @@ public class Comment {
         this.post = post;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

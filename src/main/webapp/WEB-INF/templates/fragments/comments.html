@@ -9,10 +9,27 @@
 <body>
     <th:block th:fragment="commentList">
         <div class="comment" th:each="comment : ${comments}">
-            <a class="comment-title" th:href="@{|/users/${comment.user.username}|}" th:text="${comment.user.username}"></a>
+            <a th:unless="${comment.deleted}" class="comment-title" th:href="@{|/users/${comment.user.username}|}" th:text="${comment.user.username}"></a>
+            <span th:if="${comment.deleted}" class="deleted">[deleted]</span>
+
             <span class="post-date" th:text="${#temporals.format(comment.dateTime, 'MMM dd, yyyy HH:mm')}"></span>
 
-            <div class="comment-content" th:utext="${comment.getCommentTextHtml()}"></div>
+            <div>
+                <div class="comment-content" th:classappend="${comment.deleted} ? 'deleted'" th:utext="${comment.deleted} ? '[deleted]' : ${comment.getCommentTextHtml()}"></div>
+            </div>
+
+            <div class="post-actions" th:if="${#authorization.expression('isAuthenticated()')}">
+                <th:block th:unless="${comment.deleted}">
+                    <a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or (#authentication.name == comment.user.username and comment.userCanDelete())}"
+                       href="javascript:void(0)"
+                       data-action="deleteComment"
+                       th:attr="data-href=@{|/posts/${post.id}/comments/${comment.id}/delete|},
+                           data-maxDate=(${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? '' : ${comment.maxDeleteTimeUnixTimestamp()})">delete</a>
+                </th:block>
+            </div>
+            <div class="commentaction-loading-indicator" style="display: none">
+                <img th:src="@{/images/ajax-loader.gif}" />
+            </div>
         </div>
     </th:block>
 

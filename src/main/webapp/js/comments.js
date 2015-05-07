@@ -1,6 +1,8 @@
 $(document).ready(function() {
+    var commentsContainer = $('.comments');
+
     if (location.hash == '#comments') {
-        $('.comments').get(0).scrollIntoView();
+        commentsContainer.get(0).scrollIntoView();
     }
 
     var $commentForm = $('#commentForm');
@@ -84,4 +86,76 @@ $(document).ready(function() {
             }
         });
     }
+
+    // delete expired delete/edit buttons
+    setInterval(function() {
+        $('[data-maxdate]').each(function() {
+            var maxTime = $(this).attr('data-maxdate');
+            if (maxTime != '') {
+                var currTime = new Date().getTime();
+
+                if (currTime > parseInt(maxTime)) {
+                    $(this).remove();
+                }
+            }
+        });
+    }, 1000);
+
+    commentsContainer.on('click', 'a[data-action="deleteComment"]', function(event){
+        event.preventDefault();
+
+        var btn = $(this);
+
+        var loadingIndicator = btn.closest('.comment').find('.commentaction-loading-indicator');
+
+        bootbox.dialog({
+            title: 'Delete comment',
+            message: 'Are you sure you want to delete this comment?',
+            buttons: {
+                cancel: {
+                    label: 'Cancel'
+                },
+                main: {
+                    label: 'Delete',
+                    className: 'btn-danger',
+                    callback: function() {
+                        loadingIndicator.show();
+
+                        $.ajax({
+                            type: 'post',
+                            url: btn.attr('data-href'),
+                            success: function (data) {
+                                if (data == 'ok') {
+                                    // reload comments list
+                                    $.ajax({
+                                        url: window.commentsReloadUrl,
+                                        success: function (s) {
+                                            var $commentList = $('#commentList');
+
+                                            $commentList.html(s);
+                                        }
+                                    });
+                                }
+                                else if (data == 'expired') {
+                                    loadingIndicator.hide();
+
+                                    showErrorDialog('You not allowed to delete this comment anymore. Deletion allowed only for 10 minutes.');
+                                }
+                                else {
+                                    loadingIndicator.hide();
+
+                                    showErrorDialog('Error: ' + data + '. Try reloading page.');
+                                }
+                            },
+                            error: function () {
+                                loadingIndicator.hide();
+
+                                showErrorDialog('Failed to send request. Try reloading page.');
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    });
 });

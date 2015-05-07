@@ -2,6 +2,7 @@ package alexp.blog.controller;
 
 import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
+import alexp.blog.service.ActionExpiredException;
 import alexp.blog.service.CommentService;
 import alexp.blog.service.PostService;
 import alexp.blog.service.UserService;
@@ -40,6 +41,7 @@ public class CommentController {
         List<Comment> comments = commentService.getPostComments(post);
 
         model.addAttribute("comments", comments);
+        model.addAttribute("post", post);
 
         return "fragments/comments :: commentList";
     }
@@ -61,6 +63,18 @@ public class CommentController {
             return "post not found";
 
         commentService.saveNewComment(comment, post);
+
+        return "ok";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/posts/{postId}/comments/{commentId}/delete", method = RequestMethod.POST)
+    public @ResponseBody String deleteComment(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
+        try {
+            commentService.deleteComment(commentId);
+        } catch (ActionExpiredException e) {
+            return "expired";
+        }
 
         return "ok";
     }

@@ -40,7 +40,7 @@
             </div>
 
             <div class="post-actions">
-                <a th:href="@{|/posts/${post.id}#comments|}"
+                <a class="comments-link" th:href="@{|/posts/${post.id}#comments|}"
                    th:text="${post.comments.size() == 0} ? 'comments' : (${post.comments.size()} + ' comment' + (${post.comments.size() &gt; 1} ? 's' : ''))"></a>
 
                 <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{|/posts/${post.id}/edit|}">edit</a>

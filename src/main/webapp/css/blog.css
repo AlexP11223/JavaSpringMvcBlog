@@ -116,25 +116,38 @@ label.error {
 }
 
 .post-actions {
-    margin-top: 10px;
 }
 
 .post-actions a {
     margin-right: 10px;
+    font-size: 13px;
+}
+
+.post-actions a:not(.comments-link) {
+    color: #888;
 }
 
 .comments {
-
 }
 
 .comment-title {
     font-weight: bold;
-    color: #666;
+    color: #369;
     margin-right: 10px;
 }
 
 .comment {
-    padding-bottom: 30px;
+    padding-bottom: 25px;
+}
+
+.comment-content.deleted {
+    display: inline-block;
+    background-color: #F0F0F0;
+    padding: 10px;
+}
+
+.deleted {
+    color: #808080;
 }
 
 .comment-form {
@@ -172,4 +185,12 @@ label.error {
 .reg-date {
     margin-top: 15px;
     color: #999;
+}
+
+.comments .wmd-input {
+    height: 160px;
+}
+
+#profileForm .wmd-input {
+    height: 160px;
 }

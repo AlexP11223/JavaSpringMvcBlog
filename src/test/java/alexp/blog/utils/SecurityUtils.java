@@ -6,6 +6,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 public class SecurityUtils {
 
+    public static RequestPostProcessor userAlice() {
+        return user("Alice").roles("USER");
+    }
+
     public static RequestPostProcessor userBob() {
         return user("Bob").roles("USER");
     }
