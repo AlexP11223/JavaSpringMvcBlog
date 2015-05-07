@@ -130,10 +130,28 @@ label.error {
 .comments {
 }
 
-.comment-title {
+.avatar {
+    margin-right: 10px;
+}
+
+.avatar img {
+    width: 28px;
+    height: 28px;
+}
+
+.comment-username {
     font-weight: bold;
     color: #369;
     margin-right: 10px;
+    vertical-align: middle;
+}
+
+.comment-header .post-date {
+    vertical-align: middle;
+}
+
+.comment-header {
+    margin-bottom: 10px;
 }
 
 .comment {
@@ -169,7 +187,7 @@ label.error {
     font-weight: bold;
 }
 
-.avatar {
+.avatar-big {
     margin-top: 15px;
     margin-bottom: 15px;
 }
