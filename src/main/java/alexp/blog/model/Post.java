@@ -46,7 +46,8 @@ public class Post {
     @OrderBy("name ASC")
     private Collection<Tag> tags = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.EXTRA)
     @OrderBy("dateTime ASC")
     public List<Comment> comments = new ArrayList<>();
 
