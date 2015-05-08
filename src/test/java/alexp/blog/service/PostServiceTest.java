@@ -61,10 +61,10 @@ public class PostServiceTest {
         when(postRepository.findAll(Matchers.any(PageRequest.class)))
                 .thenReturn(new PageImpl<>(new ArrayList<>()));
 
-        when(postRepository.findByHiddenFalseOrHiddenIsNull(Matchers.eq(new PageRequest(0, pageSize, Sort.Direction.DESC, "dateTime"))))
+        when(postRepository.findByHiddenFalse(Matchers.eq(new PageRequest(0, pageSize, Sort.Direction.DESC, "dateTime"))))
                 .thenReturn(new PageImpl<>(posts.subList(0, 10)));
 
-        when(postRepository.findByHiddenFalseOrHiddenIsNull(new PageRequest(1, pageSize, Sort.Direction.DESC, "dateTime")))
+        when(postRepository.findByHiddenFalse(new PageRequest(1, pageSize, Sort.Direction.DESC, "dateTime")))
                 .thenReturn(new PageImpl<>(posts.subList(10, 15)));
 
         Page<Post> page1 = postService.getPostsPage(0, pageSize);
@@ -73,19 +73,19 @@ public class PostServiceTest {
         assertThat(page1.getNumberOfElements(), is(equalTo(10)));
         assertThat(page2.getNumberOfElements(), is(equalTo(5)));
 
-        verify(postRepository, times(2)).findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class));
+        verify(postRepository, times(2)).findByHiddenFalse(Matchers.any(PageRequest.class));
     }
 
     @Test
     public void shouldGetEmptyPostPage() {
-        when(postRepository.findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class)))
+        when(postRepository.findByHiddenFalse(Matchers.any(PageRequest.class)))
                 .thenReturn(new PageImpl<>(new ArrayList<>()));
 
         Page<Post> page = postService.getPostsPage(99, 10);
 
         assertThat(page.getNumberOfElements(), is(equalTo(0)));
 
-        verify(postRepository, times(1)).findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class));
+        verify(postRepository, times(1)).findByHiddenFalse(Matchers.any(PageRequest.class));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class PostServiceTest {
 
         postService.getPostsPage(1, 10);
 
-        verify(postRepository, times(1)).findByHiddenFalseOrHiddenIsNull(Matchers.any(PageRequest.class));
+        verify(postRepository, times(1)).findByHiddenFalse(Matchers.any(PageRequest.class));
     }
 
     @Test

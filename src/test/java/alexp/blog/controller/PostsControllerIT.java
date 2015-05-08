@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import static alexp.blog.utils.SecurityUtils.userAdmin;
 import static alexp.blog.utils.SecurityUtils.userBob;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -30,7 +31,8 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     public void shouldShowPostsPage() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("posts"));
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(2L))));
     }
 
     @Test
@@ -271,6 +273,31 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
+    @ExpectedDatabase("data-post-hidden.xml")
+    @DatabaseSetup("data-post-hidden.xml")
+    public void shouldNotShowHiddenPostIfNotAdmin() throws Exception {
+        mockMvc.perform(get("/").with(userBob()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(1L))));
+
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(1L))));
+    }
+
+    @Test
+    @ExpectedDatabase("data-post-hidden.xml")
+    @DatabaseSetup("data-post-hidden.xml")
+    public void shouldShowHiddenPostIfAdmin() throws Exception {
+        mockMvc.perform(get("/").with(userAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(2L))));
+    }
+
+    @Test
     @ExpectedDatabase("data.xml")
     public void shouldDenyDeletePostIfNotAdmin() throws Exception {
         mockMvc.perform(post("/posts/1/delete").with(csrf())
@@ -290,5 +317,55 @@ public class PostsControllerIT extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
                 .andExpect(content().string("ok"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldShowPostsByTag() throws Exception {
+        mockMvc.perform(get("/posts?tagged=c++"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(2L))));
+
+        mockMvc.perform(get("/posts?tagged=meow"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(1L))))
+                .andExpect(model().attribute("postsPage", hasItems(hasProperty("id", equalTo(2L)))));
+
+        mockMvc.perform(get("/posts?tagged=c++, hello world"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(1L))))
+                .andExpect(model().attribute("postsPage", hasItems(hasProperty("id", equalTo(1L)))));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldShowNoPostsWhenTagNotExists() throws Exception {
+        mockMvc.perform(get("/posts?tagged=not exists"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(0L))));
+    }
+
+    @Test
+    @ExpectedDatabase("data-post-hidden.xml")
+    @DatabaseSetup("data-post-hidden.xml")
+    public void shouldNotShowHiddenPostsByTagIfNotAdmin() throws Exception {
+        mockMvc.perform(get("/posts?tagged=c++"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(1L))));
+    }
+
+    @Test
+    @ExpectedDatabase("data-post-hidden.xml")
+    @DatabaseSetup("data-post-hidden.xml")
+    public void shouldShowHiddenPostsByTagIfAdmin() throws Exception {
+        mockMvc.perform(get("/posts?tagged=c++").with(userAdmin()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("posts"))
+                .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(2L))));
     }
 }

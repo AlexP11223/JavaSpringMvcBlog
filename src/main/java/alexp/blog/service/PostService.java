@@ -4,6 +4,8 @@ import alexp.blog.model.Post;
 import alexp.blog.model.PostEditDto;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface PostService {
 
     Page<Post> getPostsPage(int pageNumber, int pageSize);
@@ -11,6 +13,8 @@ public interface PostService {
     Post getPost(Long id);
 
     PostEditDto getEditablePost(Long id);
+
+    Page<Post> findPostsByTag(List<String> tags, int pageNumber, int pageSize);
 
     Post saveNewPost(PostEditDto postEditDto);
 

@@ -212,3 +212,15 @@ label.error {
 #profileForm .wmd-input {
     height: 160px;
 }
+
+.search-header {
+    margin-bottom: 30px;
+}
+
+.search-header h3 {
+    display: inline;
+}
+
+.search-result {
+    margin-top: 10px;
+}

@@ -12,7 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class PostsController {
@@ -32,10 +37,25 @@ public class PostsController {
         return "posts";
     }
 
-    @RequestMapping(value = "/tag", method = RequestMethod.GET)
-    public @ResponseBody String searchByTag(@RequestParam("name") String tagName, ModelMap model) {
+    @RequestMapping(value = "/posts", method = RequestMethod.GET, params = {"tagged"})
+    public String searchByTag(@RequestParam("tagged") String tagsStr, @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
+                              ModelMap model, HttpServletRequest request) {
+        List<String> tagNames = Arrays.stream(tagsStr.split(",")).map(String::trim).distinct().collect(Collectors.toList());
 
-        return "search by tag: TODO";
+        if (tagNames.isEmpty()) {
+            return "redirect:/posts";
+        }
+
+        Page<Post> postsPage = postService.findPostsByTag(tagNames, pageNumber, 10);
+
+        model.addAttribute("postsPage", postsPage);
+
+        model.addAttribute("searchTags", tagNames);
+
+        String query = "tagged=" + request.getParameter("tagged");
+        model.addAttribute("searchQuery", query);
+
+        return "posts";
     }
 
     @RequestMapping(value = "/posts/{postId}", method = RequestMethod.GET)

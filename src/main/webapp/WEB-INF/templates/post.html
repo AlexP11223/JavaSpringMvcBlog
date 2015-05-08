@@ -36,7 +36,7 @@
                 <p class="post-date" th:text="${#temporals.format(post.dateTime, 'MMM dd, yyyy HH:mm:ss')}"></p>
 
                 <div class="post-tags">
-                    <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/tag(name=${tag.name})}"></a>
+                    <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/posts(tagged=${tag.name})}"></a>
                 </div>
 
                 <div class="post-maincontent" th:utext="${post.fullPostTextHtml()}"></div>

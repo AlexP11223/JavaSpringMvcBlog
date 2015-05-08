@@ -106,7 +106,14 @@
 
         <section class="col-sm-2">
             <div class="col-padding">
-                <!-- TODO: latest posts list, tags, search by tag, etc. -->
+                <form th:action="@{/posts}" method="get">
+                    <div class="form-group">
+                        <label for="tagSearchInput">Search by tag</label>
+                        <input type="text" class="form-control" id="tagSearchInput" name="tagged" placeholder="php, programming"/>
+                    </div>
+
+                    <button type="submit" class="btn btn-default">Search</button>
+                </form>
             </div>
         </section>
     </div>

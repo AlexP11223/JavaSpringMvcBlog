@@ -36,7 +36,7 @@ public class PostServiceImpl implements PostService
         if (userService.isAdmin())
             return postRepository.findAll(pageRequest);
 
-        return postRepository.findByHiddenFalseOrHiddenIsNull(pageRequest);
+        return postRepository.findByHiddenFalse(pageRequest);
     }
 
     @Override
@@ -52,6 +52,18 @@ public class PostServiceImpl implements PostService
             return null;
 
         return convertToPostEditDto(post);
+    }
+
+    @Override
+    public Page<Post> findPostsByTag(List<String> tags, int pageNumber, int pageSize) {
+        tags = tags.stream().map(String::toLowerCase).collect(Collectors.toList());
+
+        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, Sort.Direction.DESC, "dateTime");
+
+        if (userService.isAdmin())
+            return postRepository.findByTags(tags, (long) tags.size(), pageRequest);
+
+        return postRepository.findByTagsAndNotHidden(tags, (long) tags.size(), pageRequest);
     }
 
     @Override

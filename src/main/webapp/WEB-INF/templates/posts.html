@@ -14,8 +14,14 @@
 <body>
 
 <section layout:fragment="content">
-    <div th:if="${tag != null}">
-        <h2 th:text="${tag}"></h2>
+    <div th:if="${searchTags != null}" class="search-header">
+        <div>
+            <h3>Posts tagged as</h3>
+            <a class="post-tag" th:each="tag : ${searchTags}" th:text="${tag}" th:href="@{/posts(tagged=${tag})}"></a>
+        </div>
+        <div class="search-result">
+            <span class="h4" th:text="${postsPage.getTotalElements() == 0} ? 'Tag not found' :(${postsPage.getTotalElements()} + ' post' + (${postsPage.getTotalElements() &gt; 1 ? 's' : ''}))"></span>
+        </div>
     </div>
 
     <div id="postsContainer">
@@ -25,7 +31,7 @@
                 <p class="post-date" th:text="${#temporals.format(post.dateTime, 'MMM dd, yyyy HH:mm')}"></p>
 
                 <div class="post-tags">
-                    <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/tag(name=${tag.name})}"></a>
+                    <a class="post-tag" th:each="tag : ${post.getTags()}" th:text="${tag.name}" th:href="@{/posts(tagged=${tag.name})}"></a>
                 </div>
 
                 <div class="post-maincontent" th:utext="${post.hasShortTextPart()}? ${post.shortTextPartHtml()} : ${post.fullPostTextHtml()}"></div>
@@ -59,31 +65,31 @@
         </div>
     </div>
 
-    <div>
+    <div th:with="searchQueryParam=${searchQuery == null} ? '' : '&amp;' + ${searchQuery}">
         <ul class="pager">
             <li th:unless="${postsPage.isFirst()}">
-                <a th:href="@{/posts(page=${postsPage.getNumber() - 1})}">&larr; Newer</a>
+                <a th:href="@{/posts(page=${postsPage.getNumber() - 1})} + ${searchQueryParam}">&larr; Newer</a>
             </li>
             <li th:unless="${postsPage.isLast()}">
-                <a th:href="@{/posts(page=${postsPage.getNumber() + 1})}">Older &rarr;</a>
+                <a th:href="@{/posts(page=${postsPage.getNumber() + 1})} + ${searchQueryParam}">Older &rarr;</a>
             </li>
         </ul>
 
         <ul class="pagination">
             <li th:if="${postsPage.getNumber() - 2 ge 0}">
-                <a th:href="@{/posts(page=${postsPage.getNumber() - 2})}" th:text="${postsPage.getNumber() - 1}"></a>
+                <a th:href="@{/posts(page=${postsPage.getNumber() - 2})} + ${searchQueryParam}" th:text="${postsPage.getNumber() - 1}"></a>
             </li>
             <li th:if="${postsPage.getNumber() - 1 ge 0}">
-                <a th:href="@{/posts(page=${postsPage.getNumber() - 1})}" th:text="${postsPage.getNumber()}"></a>
+                <a th:href="@{/posts(page=${postsPage.getNumber() - 1})} + ${searchQueryParam}" th:text="${postsPage.getNumber()}"></a>
             </li>
             <li class="active">
                 <a th:text="${postsPage.getNumber() + 1}"></a>
             </li>
             <li th:if="${postsPage.getNumber() + 1 &lt; postsPage.getTotalPages()}">
-                <a th:href="@{/posts(page=${postsPage.getNumber() + 1})}" th:text="${postsPage.getNumber() + 2}"></a>
+                <a th:href="@{/posts(page=${postsPage.getNumber() + 1})} + ${searchQueryParam}" th:text="${postsPage.getNumber() + 2}"></a>
             </li>
             <li th:if="${postsPage.getNumber() + 2 &lt; postsPage.getTotalPages()}">
-                <a th:href="@{/posts(page=${postsPage.getNumber() + 2})}" th:text="${postsPage.getNumber() + 3}"></a>
+                <a th:href="@{/posts(page=${postsPage.getNumber() + 2})} + ${searchQueryParam}" th:text="${postsPage.getNumber() + 3}"></a>
             </li>
         </ul>
     </div>
