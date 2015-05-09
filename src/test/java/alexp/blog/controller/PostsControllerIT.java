@@ -37,6 +37,18 @@ public class PostsControllerIT extends AbstractIntegrationTest {
 
     @Test
     @ExpectedDatabase("data.xml")
+    public void shouldGetPostsList() throws Exception {
+        mockMvc.perform(get("/posts").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is("2")))
+                .andExpect(jsonPath("$[0].title", is("meow title")))
+                .andExpect(jsonPath("$[1].id", is("1")))
+                .andExpect(jsonPath("$[1].title", is("hello title")));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
     public void shouldShowPostPage() throws Exception {
         mockMvc.perform(get("/posts/1"))
                 .andExpect(status().isOk())

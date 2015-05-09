@@ -10,6 +10,8 @@ public interface PostService {
 
     Page<Post> getPostsPage(int pageNumber, int pageSize);
 
+    List<Post> getPostsList(int pageNumber, int pageSize);
+
     Post getPost(Long id);
 
     PostEditDto getEditablePost(Long id);

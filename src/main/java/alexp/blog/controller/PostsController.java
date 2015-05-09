@@ -37,6 +37,13 @@ public class PostsController {
         return "posts";
     }
 
+    @RequestMapping(value = {"/posts"}, method = RequestMethod.GET, headers="Accept=application/json")
+    public @ResponseBody String getPostsList(@RequestParam(value = "page", defaultValue = "0") Integer pageNumber) {
+        List<Post> posts = postService.getPostsList(pageNumber, 10);
+
+        return "[" + posts.stream().map(this::toJsonLink).collect(Collectors.joining(", \n")) + "]";
+    }
+
     @RequestMapping(value = "/posts", method = RequestMethod.GET, params = {"tagged"})
     public String searchByTag(@RequestParam("tagged") String tagsStr, @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
                               ModelMap model, HttpServletRequest request) {
@@ -155,5 +162,13 @@ public class PostsController {
         postService.deletePost(postId);
 
         return "ok";
+    }
+
+    private String toJsonLink(Post post) {
+        return "{" + toJsonField("id", post.getId().toString()) + ", " + toJsonField("title", post.getTitle()) + "}";
+    }
+
+    private String toJsonField(String name, String value) {
+        return "\"" + name + "\":\"" + value + "\"";
     }
 }

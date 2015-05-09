@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +36,13 @@ public class PostServiceImpl implements PostService
             return postRepository.findAll(pageRequest);
 
         return postRepository.findByHiddenFalse(pageRequest);
+    }
+
+    @Override
+    public List<Post> getPostsList(int pageNumber, int pageSize) {
+        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, Sort.Direction.DESC, "dateTime");
+
+        return postRepository.findByHiddenIs(false, pageRequest);
     }
 
     @Override
