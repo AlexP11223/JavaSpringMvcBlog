@@ -40,7 +40,7 @@
                            data-maxDate=(${#authorization.expression('hasRole(''ROLE_ADMIN'')')} ? '' : ${comment.maxDeleteTimeUnixTimestamp()})">delete</a>
                 </th:block>
             </div>
-            <div class="commentaction-loading-indicator" style="display: none">
+            <div class="loading-indicator" style="display: none">
                 <img th:src="@{/images/ajax-loader.gif}" />
             </div>
         </div>

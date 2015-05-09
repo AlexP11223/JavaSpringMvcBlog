@@ -108,7 +108,7 @@ $(document).ready(function() {
 
         var btn = $(this);
 
-        var loadingIndicator = btn.closest('.comment').find('.commentaction-loading-indicator');
+        var loadingIndicator = btn.closest('.comment').find('.loading-indicator');
 
         bootbox.dialog({
             title: 'Delete comment',
