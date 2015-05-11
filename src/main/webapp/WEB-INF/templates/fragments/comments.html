@@ -12,7 +12,9 @@
             <div class="comment-header">
                 <th:block th:unless="${comment.deleted}">
                     <a class="avatar" th:href="@{|/users/${comment.user.username}|}">
-                        <img class="img-rounded" src="http://i.imgur.com/ecaVXWH.jpg"/>
+                        <img class="img-rounded"  width="28" height="28"
+                             th:src="${#strings.isEmpty(comment.user.smallAvatarLink)} ? @{/images/no-avatar-small.png} :
+                                 (${#strings.startsWith(comment.user.smallAvatarLink, 'http')} ? ${comment.user.smallAvatarLink} : (@{/uploads/} + ${comment.user.smallAvatarLink}))" />
                     </a>
                     <a class="comment-username" th:href="@{|/users/${comment.user.username}|}" th:text="${comment.user.username}"></a>
                 </th:block>

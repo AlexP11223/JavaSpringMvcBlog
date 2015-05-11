@@ -1,8 +1,8 @@
 package alexp.blog.controller;
 
 import alexp.blog.model.User;
-import alexp.blog.service.AuthException;
-import alexp.blog.service.UserService;
+import alexp.blog.service.*;
+import alexp.blog.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,16 +12,21 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Controller
 public class UsersController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AvatarService avatarService;
 
     @Autowired
     private Validator userValidator;
@@ -160,8 +165,12 @@ public class UsersController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/edit_profile", method = RequestMethod.POST)
     public String editProfile(@Validated({User.ProfileInfoValidationGroup.class}) @ModelAttribute(value = "user") User user, BindingResult result,
-                              RedirectAttributes redirectAttributes, ModelMap model) {
+                              RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
+            // quick workaround to show avatar
+            User currentUser = userService.currentUser();
+            user.setBigAvatarLink(currentUser.getBigAvatarLink());
+
             return "editprofile";
         }
 
@@ -170,6 +179,28 @@ public class UsersController {
         redirectAttributes.addFlashAttribute("success", true);
 
         return "redirect:/edit_profile";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/upload_avatar", method = RequestMethod.POST)
+    public @ResponseBody String uploadAvatar(@RequestParam("avatarFile") MultipartFile file) throws IOException {
+        try {
+            UploadedAvatarInfo result = avatarService.upload(file);
+
+            userService.changeAvatar(result);
+
+            return makeAvatarUploadResponse("ok", result);
+        } catch (UnsupportedFormatException e) {
+            return makeAvatarUploadResponse("invalid_format", null);
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/remove_avatar", method = RequestMethod.POST)
+    public @ResponseBody String removeAvatar() throws IOException {
+        userService.removeAvatar();
+
+        return "ok";
     }
 
     @RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
@@ -182,5 +213,11 @@ public class UsersController {
         model.addAttribute("user", user);
 
         return "profile";
+    }
+
+    private String makeAvatarUploadResponse(String status, UploadedAvatarInfo uploadedAvatarInfo) {
+        return "{" + JsonUtils.toJsonField("status", status) +
+                (uploadedAvatarInfo == null ? "" : (", " + JsonUtils.toJsonField("link", uploadedAvatarInfo.bigImageLink))) +
+                "}";
     }
 }

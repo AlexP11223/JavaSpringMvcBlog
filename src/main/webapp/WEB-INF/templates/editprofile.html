@@ -14,13 +14,24 @@
     <script src="../../js/Markdown.Editor.js" th:src="@{/js/Markdown.Editor.js}"></script>
 
     <link rel="stylesheet" type="text/css" href="../../css/pagedown.css" th:href="@{/css/pagedown.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../css/fileupload.css" th:href="@{/css/fileupload.css}"/>
+
     <script src="../../js/editprofile.js" th:src="@{/js/editprofile.js}"></script>
+
+    <script src="../../js/fileupload/jquery.iframe-transport.js" th:src="@{/js/fileupload/jquery.iframe-transport.js}"></script>
+    <script src="../../js/fileupload/jquery.fileupload.js" th:src="@{/js/fileupload/jquery.fileupload.js}"></script>
 </head>
 
 <body>
 
 <section layout:fragment="content">
     <div class="col-sm-8 no-padding-col">
+
+        <script th:inline="javascript">
+            window.avatarUploadUrl = /*[[@{|/upload_avatar|}]]*/ '';
+            window.imgBaseUrl = /*[[@{|/uploads/|}]]*/ '';
+            window.noAvatarImgUrl = /*[[@{|/images/no-avatar-big.png|}]]*/ '';
+        </script>
 
         <div th:if="${success}" class="settings-success">
             <img width="32" height="32" src="../../images/success-tick.png" th:src="@{/images/success-tick.png}"/>
@@ -36,11 +47,6 @@
                 </ul>
             </div>
 
-            <div class="form-group">
-                <label for="websiteLink">Website:</label>
-                <input type="text" class="form-control" id="websiteLink" th:field="*{websiteLink}"/>
-            </div>
-
             <div class="form-group wmd-panel">
                 <label for="wmd-input">About me:</label>
                 <div id="wmd-button-bar"></div>
@@ -48,9 +54,50 @@
                 <div id="wmd-preview" class="wmd-panel wmd-preview"></div>
             </div>
 
+            <div class="form-group">
+                <label for="websiteLink">Website:</label>
+                <input type="text" class="form-control" id="websiteLink" th:field="*{websiteLink}"/>
+            </div>
+
             <button type="submit" class="btn btn-default">Apply</button>
 
         </form>
+
+        <div id="avatarForm">
+            <div class="avatar-big">
+                <img id="avatarImg" class="img-responsive img-rounded" width="160" height="160"
+                     th:src="${#strings.isEmpty(user.bigAvatarLink)} ? @{/images/no-avatar-big.png} :
+                          (${#strings.startsWith(user.bigAvatarLink, 'http')} ? ${user.bigAvatarLink} : (@{/uploads/} + ${user.bigAvatarLink}))"/>
+            </div>
+
+            <div>
+                <label>JPG or PNG, preferably square (will be resized to 160x160 and 28x28), max size 1 MB</label>
+                <div>
+                    <span role="button" class="btn btn-default fileinput-button" id="uploadAvatar">
+                        <span>Change picture</span>
+                        <input type="file" accept="image/jpeg, image/png" id="avatarFileUploadInput" name="avatarFile"/>
+                    </span>
+                    <span role="button" class="btn btn-default" id="removeAvatar" th:style="${#strings.isEmpty(user.bigAvatarLink)} ? 'display: none'"
+                          th:attr="data-href=@{/remove_avatar}">Remove</span>
+                </div>
+            </div>
+
+            <div id="avatarUploadProgress" class="progress" style="display: none">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <div class="loading-indicator" style="display: none">
+                <img th:src="@{/images/ajax-loader.gif}" />
+            </div>
+        </div>
+
+        <div>
+            <label class="error" id="avatarError"></label>
+
+            <div class="settings-success" id="avatarSuccess" style="display: none">
+                <img width="24" height="24" src="../../images/success-tick.png" th:src="@{/images/success-tick.png}"/>
+                Avatar successfully saved
+            </div>
+        </div>
     </div>
 </section>
 

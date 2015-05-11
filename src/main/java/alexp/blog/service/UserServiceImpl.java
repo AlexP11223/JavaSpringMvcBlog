@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeEmail(String newEmail, String currentPassword) throws AuthException {
         User user = currentUser();
-
+        System.out.println(user.bigAvatarLink);
         if (!passwordEncoder.matches(currentPassword, user.getPassword()))
             throw new AuthException("password does not match");
 
@@ -114,6 +114,28 @@ public class UserServiceImpl implements UserService {
         user.setAboutText(newProfileInfo.getAboutText());
 
         user.setWebsiteLink(newProfileInfo.getWebsiteLink());
+
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void changeAvatar(UploadedAvatarInfo uploadedAvatarInfo) {
+        User user = currentUser();
+
+        user.setBigAvatarLink(uploadedAvatarInfo.bigImageLink);
+
+        user.setSmallAvatarLink(uploadedAvatarInfo.smallImageLink);
+
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void removeAvatar() {
+        User user = currentUser();
+
+        user.setBigAvatarLink(null);
+
+        user.setSmallAvatarLink(null);
 
         userRepository.saveAndFlush(user);
     }

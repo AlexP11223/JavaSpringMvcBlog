@@ -19,8 +19,8 @@
         <div class="col-sm-3 no-padding-col profile-info">
             <h3 th:text="${user.username}"></h3>
 
-            <div class="avatar-big">
-                <img class="img-responsive img-rounded" src="http://i.imgur.com/ecaVXWH.jpg"/>
+            <div class="avatar-big" th:unless="${#strings.isEmpty(user.bigAvatarLink)}">
+                <img class="img-responsive img-rounded" width="160" height="160" th:src="${#strings.startsWith(user.bigAvatarLink, 'http')} ? ${user.bigAvatarLink} : (@{/uploads/} + ${user.bigAvatarLink})"/>
             </div>
 
             <div class="website-link" th:unless="${#strings.isEmpty(user.websiteLink)}">

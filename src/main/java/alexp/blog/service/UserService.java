@@ -21,6 +21,10 @@ public interface UserService extends UserDetailsService {
 
     void changeProfileInfo(User newProfileInfo);
 
+    void changeAvatar(UploadedAvatarInfo uploadedAvatarInfo);
+
+    void removeAvatar();
+
     void authenticate(User user);
 
     boolean isAuthenticated();

@@ -17,6 +17,8 @@
     <mvc:resources location="/js/" mapping="/js/**" />
     <mvc:resources location="/favicon.ico" mapping="/favicon.ico" />
 
+    <mvc:resources location="file:${uploading.dirpath}" mapping="/uploads/**" />
+
     <mvc:annotation-driven />
     <context:component-scan base-package="alexp.blog" />
 
@@ -25,6 +27,10 @@
     </bean>
 
     <security:global-method-security pre-post-annotations="enabled"/>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1048576"/>
+    </bean>
 
     <!-- Thymeleaf resolver, etc. -->
 
@@ -56,5 +62,17 @@
     <!-- view that do not require any controller logic -->
     <mvc:view-controller path="/about" view-name="about"/>
     <mvc:view-controller path="/403" view-name="403"/>
+
+    <beans profile="dev">
+        <context:property-placeholder location="classpath:/uploading-dev.properties"/>
+    </beans>
+
+    <beans profile="prod">
+        <context:property-placeholder location="classpath:/uploading-prod.properties"/>
+    </beans>
+
+    <beans profile="test">
+        <context:property-placeholder location="classpath:/uploading-test.properties"/>
+    </beans>
 
 </beans>

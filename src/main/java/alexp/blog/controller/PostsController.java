@@ -5,6 +5,7 @@ import alexp.blog.model.Post;
 import alexp.blog.model.PostEditDto;
 import alexp.blog.service.PostService;
 import alexp.blog.service.UserService;
+import alexp.blog.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -165,10 +166,6 @@ public class PostsController {
     }
 
     private String toJsonLink(Post post) {
-        return "{" + toJsonField("id", post.getId().toString()) + ", " + toJsonField("title", post.getTitle()) + "}";
-    }
-
-    private String toJsonField(String name, String value) {
-        return "\"" + name + "\":\"" + value + "\"";
+        return "{" + JsonUtils.toJsonField("id", post.getId().toString()) + ", " + JsonUtils.toJsonField("title", post.getTitle()) + "}";
     }
 }

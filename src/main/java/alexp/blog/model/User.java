@@ -76,6 +76,12 @@ public class User {
     @Size(max = 80, groups = {ProfileInfoValidationGroup.class})
     public String websiteLink;
 
+    @Column(nullable = true)
+    public String smallAvatarLink;
+
+    @Column(nullable = true)
+    public String bigAvatarLink;
+
     public Long getId() {
         return Id;
     }
@@ -163,6 +169,22 @@ public class User {
 
     public void setWebsiteLink(String websiteLink) {
         this.websiteLink = websiteLink;
+    }
+
+    public String getSmallAvatarLink() {
+        return smallAvatarLink;
+    }
+
+    public void setSmallAvatarLink(String smallAvatarLink) {
+        this.smallAvatarLink = smallAvatarLink;
+    }
+
+    public String getBigAvatarLink() {
+        return bigAvatarLink;
+    }
+
+    public void setBigAvatarLink(String bigAvatarLink) {
+        this.bigAvatarLink = bigAvatarLink;
     }
 
     public boolean hasRole(String role) {

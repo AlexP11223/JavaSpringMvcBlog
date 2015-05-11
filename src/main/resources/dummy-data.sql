@@ -3,9 +3,9 @@ INSERT INTO roles(id, name) VALUES(2, 'ROLE_ADMIN');
 
 INSERT INTO users(id, username, email, password, enabled, registrationDate)
     VALUES(1, 'admin', 'alex.pantec@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-01-01 00:00:01');
-INSERT INTO users(id, username, email, password, enabled, registrationDate, websiteLink, aboutText)
+INSERT INTO users(id, username, email, password, enabled, registrationDate, bigAvatarLink, smallAvatarLink, websiteLink, aboutText)
     VALUES(2, 'Alice', 'alice@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-04-01 00:00:01',
-      'http://google.com', 'I am Alice and I **LOVE** cats!
+      'http://i.imgur.com/GK1lTX8.jpg', 'http://i.imgur.com/GK1lTX8.jpg', 'http://google.com', 'I am Alice and I **LOVE** cats!
 
 And programming.
 
@@ -14,9 +14,9 @@ Actually, I started learning programming when my cat showed me this [amazing Jav
 
   [1]: http://jsforcats.com/
   [2]: https://code.google.com/p/cat-language/');
-INSERT INTO users(id, username, email, password, enabled, registrationDate, websiteLink, aboutText)
+INSERT INTO users(id, username, email, password, enabled, registrationDate, bigAvatarLink, smallAvatarLink, websiteLink, aboutText)
     VALUES(3, 'Bob', 'bob@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-04-03 00:00:01',
-      'http://ya.ru', 'I am a C++ programmer.
+      'http://i.imgur.com/ZGUoKG0.jpg', 'http://i.imgur.com/ZGUoKG0.jpg', 'http://ya.ru', 'I am a C++ programmer.
 
 And that''s it about me. I don''t have time for anything else since I always staying late at work to catch all bugs while my Java-coworkers having fun with their friends and families.');
 

@@ -228,3 +228,16 @@ label.error {
 #latestPosts {
     margin-top: 30px;
 }
+
+#avatarForm {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+#removeAvatar {
+    margin-left: 15px;
+}
+
+#avatarUploadProgress {
+    margin-top: 15px;
+}
