@@ -16,7 +16,8 @@
                              th:src="${#strings.isEmpty(comment.user.smallAvatarLink)} ? @{/images/no-avatar-small.png} :
                                  (${#strings.startsWith(comment.user.smallAvatarLink, 'http')} ? ${comment.user.smallAvatarLink} : (@{/uploads/} + ${comment.user.smallAvatarLink}))" />
                     </a>
-                    <a class="comment-username" th:href="@{|/users/${comment.user.username}|}" th:text="${comment.user.username}"></a>
+                    <a class="comment-username" th:href="@{|/users/${comment.user.username}|}" th:text="${comment.user.username}"
+                            th:classappend="${comment.user.hasRole('ROLE_ADMIN')} ? 'comment-username-admin'"></a>
                 </th:block>
                 <span th:if="${comment.deleted}" class="deleted">[deleted]</span>
 

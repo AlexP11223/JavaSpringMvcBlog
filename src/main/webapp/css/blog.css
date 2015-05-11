@@ -146,6 +146,10 @@ label.error {
     vertical-align: middle;
 }
 
+.comment-username-admin {
+    color: darkred;
+}
+
 .comment-header .post-date {
     vertical-align: middle;
 }
