@@ -20,10 +20,7 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    @Override
-    public List<Comment> getPostComments(Post post) {
-        return post.getComments();
-    }
+    private final int MAX_COMMENT_LEVEL = 5;
 
     @Override
     public Comment getComment(Long id) {
@@ -31,7 +28,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void saveNewComment(Comment comment, Post post) {
+    public Long saveNewComment(Comment comment, Post post, Long parentId) {
+        if (parentId != null) {
+            Comment parentComment = getComment(parentId);
+
+            int level = parentComment.commentLevel();
+
+            comment.setParentComment(level < MAX_COMMENT_LEVEL ? parentComment : parentComment.getParentComment());
+        }
+
         comment.setDateTime(LocalDateTime.now());
 
         comment.setPost(post);
@@ -39,6 +44,8 @@ public class CommentServiceImpl implements CommentService {
         comment.setUser(userService.currentUser());
 
         commentRepository.saveAndFlush(comment);
+
+        return comment.getId();
     }
 
     @Override

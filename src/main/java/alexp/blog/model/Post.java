@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "posts")
@@ -61,6 +62,10 @@ public class Post {
 
     public String fullPostTextHtml() {
         return MarkdownConverter.toHtml(getFullPostText().replace(shortPartSeparator(), ""));
+    }
+
+    public List<Comment> topLevelComments() {
+        return comments.stream().filter(c -> c.getParentComment() == null).collect(Collectors.toList());
     }
 
     public Long getId() {

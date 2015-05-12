@@ -123,7 +123,7 @@ label.error {
     font-size: 13px;
 }
 
-.post-actions a:not(.comments-link) {
+.post-actions a:not(.comments-link):not(.comment-reply-btn) {
     color: #888;
 }
 
@@ -160,6 +160,14 @@ label.error {
 
 .comment {
     padding-bottom: 25px;
+}
+
+.new-comment .comment-header {
+    background-color: #E3FFD0;
+}
+
+.child-comment-node {
+    margin-left: 20px;
 }
 
 .comment-content.deleted {

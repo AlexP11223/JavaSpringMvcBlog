@@ -6,6 +6,7 @@ import alexp.blog.service.ActionExpiredException;
 import alexp.blog.service.CommentService;
 import alexp.blog.service.PostService;
 import alexp.blog.service.UserService;
+import alexp.blog.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,7 @@ public class CommentController {
         if (post.isHidden() && !userService.isAdmin())
             throw new ResourceNotFoundException();
 
-        List<Comment> comments = commentService.getPostComments(post);
+        List<Comment> comments = post.topLevelComments();
 
         model.addAttribute("comments", comments);
         model.addAttribute("post", post);
@@ -49,22 +50,23 @@ public class CommentController {
     @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/posts/{postId}/comments/create", method = RequestMethod.POST)
     public @ResponseBody String addComment(@Valid @ModelAttribute(value = "comment") Comment comment, BindingResult result,
-                                           @PathVariable("postId") Long postId) {
+                                           @PathVariable("postId") Long postId,
+                                           @RequestParam(value = "parentId", defaultValue = "") Long parentId) {
         if (result.hasErrors()) {
-            return result.getAllErrors().get(0).getDefaultMessage();
+            return makeCommentAddResponse("error", result.getAllErrors().get(0).getDefaultMessage());
         }
 
         Post post = postService.getPost(postId);
 
         if (post == null)
-            return "post not found";
+            return makeCommentAddResponse("error", "post not found");
 
         if (post.isHidden() && !userService.isAdmin())
-            return "post not found";
+            return makeCommentAddResponse("error", "post not found");
 
-        commentService.saveNewComment(comment, post);
+        Long addedId = commentService.saveNewComment(comment, post, parentId);
 
-        return "ok";
+        return makeCommentAddResponse("ok", addedId);
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -106,6 +108,25 @@ public class CommentController {
             throw new ResourceNotFoundException();
 
         return comment.getCommentText();
+    }
+
+    private String makeCommentAddResponse(String status, String msg, Long id) {
+        return "{" + JsonUtils.toJsonField("status", status) +
+                (id == null ? "" : (", " + JsonUtils.toJsonField("id", id.toString()))) +
+                (msg == null ? "" : (", " + JsonUtils.toJsonField("message", msg))) +
+                "}";
+    }
+
+    private String makeCommentAddResponse(String status, Long id) {
+        return makeCommentAddResponse(status, null, id);
+    }
+
+    private String makeCommentAddResponse(String status, String msg) {
+        return makeCommentAddResponse(status, msg, null);
+    }
+
+    private String makeCommentAddResponse(String status) {
+        return makeCommentAddResponse(status, null, null);
     }
 
 }

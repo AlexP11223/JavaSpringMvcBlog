@@ -24,7 +24,10 @@ public class CommentControllerIT extends AbstractIntegrationTest {
         mockMvc.perform(get("/posts/1/comments"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("fragments/comments :: commentList"))
-                .andExpect(model().attribute("comments", hasSize(3)));
+                .andExpect(model().attribute("comments", hasSize(2)))
+                .andExpect(model().attribute("comments",
+                        allOf(hasItem(hasProperty("childrenComments", hasSize(1))),
+                                hasItem(hasProperty("childrenComments", hasSize(0))))));
     }
 
     @Test
@@ -71,18 +74,18 @@ public class CommentControllerIT extends AbstractIntegrationTest {
 
     @Test
     @ExpectedDatabase("data.xml")
-    public void shouldReturnErrorTextWhenSubmittedInvalidComment() throws Exception {
+    public void shouldReturnErrorWhenSubmittedInvalidComment() throws Exception {
         mockMvc.perform(post("/posts/1/comments/create").with(userBob()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("commentText", ""))
                 .andExpect(status().isOk())
-                .andExpect(content().string(not(equalTo("ok"))));
+                .andExpect(jsonPath("$.status", is("error")));
 
         mockMvc.perform(post("/posts/999/comments/create").with(userBob()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("commentText", "text"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(not(equalTo("ok"))));
+                .andExpect(jsonPath("$.status", is("error")));
     }
 
     @Test
@@ -93,7 +96,33 @@ public class CommentControllerIT extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("commentText", "new comment text"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("ok"));
+                .andExpect(jsonPath("$.status", is("ok")));
+    }
+
+    @Test
+    @ExpectedDatabase(value = "data-comment-reply-added.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @DatabaseTearDown(value = "data.xml", type = DatabaseOperation.TRUNCATE_TABLE) // to reset id sequence, otherwise other tests that insert comments will fail on ExpectedDatabase
+    public void shouldAddReplyComment() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/create").with(userBob()).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("commentText", "new comment text")
+                .param("parentId", "3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("ok")));
+    }
+
+    @Test
+    @ExpectedDatabase(value = "data-comment-reply-added-limit-exceeded.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+    @DatabaseTearDown(value = "data.xml", type = DatabaseOperation.TRUNCATE_TABLE) // to reset id sequence, otherwise other tests that insert comments will fail on ExpectedDatabase
+    public void shouldAddReplyToPreviousLevelWhenLimitExceeded() throws Exception {
+        for (int i = 3; i <= 9; i++) {
+            mockMvc.perform(post("/posts/1/comments/create").with(userBob()).with(csrf())
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .param("commentText", "new comment text")
+                    .param("parentId", Integer.toString(i)))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status", is("ok")));
+        }
     }
 
     @Test
@@ -121,7 +150,7 @@ public class CommentControllerIT extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("commentText", "new comment text"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("ok"));
+                .andExpect(jsonPath("$.status", is("ok")));
 
         mockMvc.perform(post("/posts/1/comments/4/delete").with(userBob()).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
@@ -174,7 +203,7 @@ public class CommentControllerIT extends AbstractIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("commentText", "new comment text"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("ok"));
+                .andExpect(jsonPath("$.status", is("ok")));
 
         String text = "edited text";
 

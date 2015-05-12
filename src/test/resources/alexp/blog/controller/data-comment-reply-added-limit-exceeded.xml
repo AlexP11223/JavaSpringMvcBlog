@@ -2,7 +2,7 @@
     <users id="1" username="admin" email="admin@gmail.com" enabled="1" registrationDate="2015-03-01 00:00:01" password="$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO"/>
     <users id="2" username="Alice" email="alice@gmail.com" enabled="1" registrationDate="2015-04-01 00:00:01" password="$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO"
            websiteLink="http://google.com" aboutText="about Alice" bigAvatarLink="img.png" smallAvatarLink="small.png"/>
-    <users id="3" username="Bob" email="newemail@gmail.com" enabled="1" registrationDate="2015-04-01 00:00:01" password="$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO"/>
+    <users id="3" username="Bob" email="bob@gmail.com" enabled="1" registrationDate="2015-04-01 00:00:01" password="$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO"/>
 
     <roles id="1" name="ROLE_USER"/>
     <roles id="2" name="ROLE_ADMIN"/>
@@ -24,10 +24,15 @@
     <posts_tags post_id="2" tag_id="1"/>
     <posts_tags post_id="2" tag_id="3"/>
 
-    <comments id="1" post_id="1" user_id="2" commentText="comment1 text" dateTime="2015-04-01 13:30:00" deleted="0"/>
-    <comments id="2" post_id="1" user_id="1" commentText="comment2 text" dateTime="2015-04-01 13:40:00" deleted="0" parent_id="1"/>
-    <comments id="3" post_id="1" user_id="2" commentText="comment3 text" dateTime="2015-04-01 13:50:00" deleted="0"/>
-
-    <persistent_logins/>
+    <comments id="1" post_id="1" user_id="2" commentText="comment1 text" deleted="0"/>
+    <comments id="2" post_id="1" user_id="1" commentText="comment2 text" deleted="0" parent_id="1"/>
+    <comments id="3" post_id="1" user_id="2" commentText="comment3 text" deleted="0"/>
+    <comments id="4" post_id="1" user_id="3" commentText="new comment text" deleted="0" parent_id="3"/>
+    <comments id="5" post_id="1" user_id="3" commentText="new comment text" deleted="0" parent_id="4"/>
+    <comments id="6" post_id="1" user_id="3" commentText="new comment text" deleted="0" parent_id="5"/>
+    <comments id="7" post_id="1" user_id="3" commentText="new comment text" deleted="0" parent_id="6"/>
+    <comments id="8" post_id="1" user_id="3" commentText="new comment text" deleted="0" parent_id="7"/>
+    <comments id="9" post_id="1" user_id="3" commentText="new comment text" deleted="0" parent_id="7"/>
+    <comments id="10" post_id="1" user_id="3" commentText="new comment text" deleted="0" parent_id="7"/>
 
 </dataset>

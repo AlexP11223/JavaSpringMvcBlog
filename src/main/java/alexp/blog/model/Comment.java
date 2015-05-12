@@ -5,7 +5,10 @@ import alexp.blog.utils.LocalDateTimePersistenceConverter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "comments")
@@ -34,6 +37,25 @@ public class Comment {
 
     @Column(nullable = false)
     private boolean deleted = false;
+
+    // simple (adjacency list) comments hierarchy implementation
+    // probably not the most performance efficient choice since it will have additional DB queries for each level in each subtree
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    private Comment parentComment;
+
+    @OneToMany(mappedBy="parentComment", cascade = CascadeType.ALL)
+    @OrderBy("dateTime ASC")
+    private List<Comment> childrenComments = new ArrayList<>();
+
+    public int commentLevel() {
+        Comment comment = this;
+        int level = 0;
+        while ((comment = comment.getParentComment()) != null)
+            level++;
+        return level;
+    }
 
     public boolean userCanDelete() {
         return LocalDateTime.now().isBefore(maxDeleteTime());
@@ -111,5 +133,21 @@ public class Comment {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public List<Comment> getChildrenComments() {
+        return childrenComments;
+    }
+
+    public void setChildrenComments(List<Comment> childrenComments) {
+        this.childrenComments = childrenComments;
     }
 }

@@ -40,26 +40,6 @@ public class CommentServiceTest {
     }
 
     @Test
-    public void shouldGetComments() {
-        post.setComments(Arrays.asList(new Comment(), new Comment()));
-
-        List<Comment> comments = commentService.getPostComments(post);
-
-        assertThat(comments.size(), is(equalTo(2)));
-
-        verify(post, times(1)).getComments();
-    }
-
-    @Test
-    public void shouldReturnNoComments() {
-        List<Comment> comments = commentService.getPostComments(post);
-
-        assertThat(comments.size(), is(equalTo(0)));
-
-        verify(post, times(1)).getComments();
-    }
-
-    @Test
     public void shouldAddNewComment() {
         User user = new User();
 
@@ -67,7 +47,7 @@ public class CommentServiceTest {
 
         Comment comment = new Comment();
 
-        commentService.saveNewComment(comment, post);
+        commentService.saveNewComment(comment, post, null);
 
         assertThat(comment.getPost(), is(equalTo(post)));
 

@@ -20,12 +20,33 @@ INSERT INTO users(id, username, email, password, enabled, registrationDate, bigA
 
 And that''s it about me. I don''t have time for anything else since I always staying late at work to catch all bugs while my Java-coworkers having fun with their friends and families.');
 
+INSERT INTO users(id, username, email, password, enabled, registrationDate)
+    VALUES(4, 'User1', 'user1@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-01-02 00:00:01');
+INSERT INTO users(id, username, email, password, enabled, registrationDate)
+    VALUES(5, 'User2', 'user2@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-01-03 00:00:01');
+INSERT INTO users(id, username, email, password, enabled, registrationDate)
+    VALUES(6, 'User3', 'user3@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-01-04 00:00:01');
+INSERT INTO users(id, username, email, password, enabled, registrationDate)
+    VALUES(7, 'User4', 'user4@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-01-05 00:00:01');
+INSERT INTO users(id, username, email, password, enabled, registrationDate)
+    VALUES(8, 'User5', 'user5@gmail.com', '$2a$10$TB9YW0AYPqF1PSfMKrANAuvxLFZSYc2b7uJv0c3wZ8BM45zs1MBLO', 1, '2015-01-06 00:00:01');
+
 INSERT INTO users_roles(user_id, role_id) VALUES(1, 1);
 INSERT INTO users_roles(user_id, role_id) VALUES(1, 2);
 
 INSERT INTO users_roles(user_id, role_id) VALUES(2, 1);
 
 INSERT INTO users_roles(user_id, role_id) VALUES(3, 1);
+
+INSERT INTO users_roles(user_id, role_id) VALUES(4, 1);
+
+INSERT INTO users_roles(user_id, role_id) VALUES(5, 1);
+
+INSERT INTO users_roles(user_id, role_id) VALUES(6, 1);
+
+INSERT INTO users_roles(user_id, role_id) VALUES(7, 1);
+
+INSERT INTO users_roles(user_id, role_id) VALUES(8, 1);
 
 INSERT INTO tags(Id, name) VALUES(1, 'c++');
 INSERT INTO tags(Id, name) VALUES(2, 'java');
@@ -1673,6 +1694,17 @@ INSERT INTO posts_tags(post_id, tag_id) VALUES (85, 5);
 
 
 
-INSERT INTO comments(commentText, dateTime, post_id, user_id, deleted) VALUES('Great post! Keep it up!', '2015-04-03 14:30:58', 85, 2, 0);
-INSERT INTO comments(commentText, dateTime, post_id, user_id, deleted) VALUES('Yeah, I learnt **so much** here.', '2015-04-03 16:35:58', 85, 3, 0);
-INSERT INTO comments(commentText, dateTime, post_id, user_id, deleted) VALUES('Thank you.:)', '2015-04-03 19:00:58', 85, 1, 0);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted) VALUES(1, 'Great post! Keep it up!', '2015-04-03 14:30:58', 85, 2, 0);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted) VALUES(2, 'Yeah, I learnt **so much** here.', '2015-04-03 16:35:58', 85, 3, 0);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(3, 'Thank you.:)', '2015-04-03 19:00:58', 85, 1, 0, 2);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(4, 'OK!', '2015-04-03 19:10:58', 85, 1, 0, 1);
+
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted) VALUES(5, 'How about adding a bit more examples?', '2015-04-04 19:00:58', 85, 4, 0);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(6, 'Can you be more specific?', '2015-04-05 15:00:58', 85, 1, 0, 5);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(7, 'I would like to know how to implement this in JavaScript.', '2015-04-05 18:30:58', 85, 4, 0, 6);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(8, 'OK, I''ll think about it.', '2015-04-05 18:40:58', 85, 1, 0, 7);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(9, 'Just use Jake Weary.', '2015-04-05 18:45:58', 85, 5, 0, 7);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(10, 'And PHP please.', '2015-04-08 11:15:58', 85, 6, 0, 6);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(11, 'And cat language!', '2015-04-09 13:30:58', 85, 2, 0, 6);
+
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(12, '**VRASUBATBURUK UG BUTHARUBATGRUIUK!!!**', '2015-05-09 12:30:58', 85, 8, 1, 2);

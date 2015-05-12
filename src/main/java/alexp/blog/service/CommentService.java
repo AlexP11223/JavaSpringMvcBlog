@@ -7,11 +7,9 @@ import java.util.List;
 
 public interface CommentService {
 
-    List<Comment> getPostComments(Post post);
-
     Comment getComment(Long id);
 
-    void saveNewComment(Comment comment, Post post);
+    Long saveNewComment(Comment comment, Post post, Long parentId);
 
     void deleteComment(Long commentId) throws ActionExpiredException;
 
