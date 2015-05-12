@@ -52,14 +52,8 @@ function setupLoginForm(id) {
                     data: data,
                     success: function (data) {
                         if (data == 'ok') {
-                            // reload page content
-                            $.ajax({
-                                url: "",
-                                context: document.body,
-                                success: function (s) {
-                                    $(this).html(s);
-                                }
-                            });
+                            // reload page
+                            window.location.reload(true);
                         }
                         else {
                             $loginBtn.prop('disabled', false);
