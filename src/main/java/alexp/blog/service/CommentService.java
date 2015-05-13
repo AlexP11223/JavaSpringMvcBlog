@@ -1,5 +1,6 @@
 package alexp.blog.service;
 
+import alexp.blog.controller.ForbiddenException;
 import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
 
@@ -14,4 +15,6 @@ public interface CommentService {
     void deleteComment(Long commentId) throws ActionExpiredException;
 
     void updateComment(Comment newCommentData, Long commentId) throws ActionExpiredException;
+
+    void vote(Long commentId, boolean like) throws AlreadyVotedException, ForbiddenException;
 }

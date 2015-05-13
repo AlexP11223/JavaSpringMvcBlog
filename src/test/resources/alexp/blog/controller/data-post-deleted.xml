@@ -25,6 +25,8 @@
 
     <post_ratings />
 
+    <comment_ratings />
+
     <persistent_logins/>
 
 </dataset>

@@ -35,7 +35,13 @@ $(document).ready(function() {
                 }
                 else {
                     btn.removeClass('voted');
-                    showErrorDialog('Voting failed. Try reloading page.');
+
+                    if (data == 'own_comment') {
+                        showErrorDialog('Cannot vote for your own comments!');
+                    }
+                    else {
+                        showErrorDialog('Voting failed. Try reloading page.');
+                    }
                 }
             },
             error: function () {

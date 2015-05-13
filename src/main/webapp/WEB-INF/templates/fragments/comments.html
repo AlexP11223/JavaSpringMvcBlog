@@ -7,7 +7,7 @@
 </head>
 
 <body>
-    <th:block th:fragment="commentList">
+    <th:block th:fragment="commentList" th:with="isUser=${#authorization.expression('hasRole(''ROLE_USER'')')}">
         <div class="comment-node" th:each="comment : ${comments}">
             <div class="comment" th:attr="data-commentId=${comment.id}">
                 <div class="comment-header">
@@ -26,6 +26,24 @@
                         <span th:text="${#temporals.format(comment.dateTime, 'MMM dd, yyyy HH:mm')}"></span>
                         <i th:unless="${comment.modifiedDateTime == null}" th:text="' (modified ' + ${#temporals.format(comment.modifiedDateTime, 'MMM dd, yyyy HH:mm')} + ')'"></i>
                     </span>
+
+                    <div th:unless="${comment.deleted}" class="comment-rating-block" th:title="${isUser} ? '' : 'Log in or register to vote'"
+                         th:with="ratingSum=${comment.getRatingSum()}, userVoteValue=${comment.getUserVoteValue(userId)}">
+                        <a class=" rating-arrow like-arrow" href="javascript:void(0)"
+                           th:attr="data-action=${isUser and userVoteValue == 0} ? 'vote' : '', data-href=@{|/posts/${post.id}/comments/${comment.id}/like|}"
+                           th:classappend="${userVoteValue == 1} ? 'voted'"
+                           data-vote-type="like">
+                            <span class="glyphicon glyphicon-arrow-up"></span>
+                        </a>
+                    <span class="rating-value" th:text="${ratingSum}"
+                          th:classappend="${ratingSum == 0} ? 'rating-value-no' : (${ratingSum lt 0} ? 'rating-value-negative' : 'rating-value-positive')"></span>
+                        <a class="rating-arrow dislike-arrow" href="javascript:void(0)"
+                           th:attr="data-action=${isUser and userVoteValue == 0} ? 'vote' : '', data-href=@{|/posts/${post.id}/comments/${comment.id}/dislike|}"
+                           th:classappend="${userVoteValue == -1} ? 'voted'"
+                           data-vote-type="dislike">
+                            <span class="glyphicon glyphicon-arrow-down"></span>
+                        </a>
+                    </div>
                 </div>
 
                 <div>

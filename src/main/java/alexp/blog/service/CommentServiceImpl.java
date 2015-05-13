@@ -1,15 +1,13 @@
 package alexp.blog.service;
 
 import alexp.blog.controller.ForbiddenException;
-import alexp.blog.model.Comment;
-import alexp.blog.model.Post;
+import alexp.blog.model.*;
+import alexp.blog.repository.CommentRatingRepository;
 import alexp.blog.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 @Service("commentService")
 public class CommentServiceImpl implements CommentService {
@@ -20,7 +18,10 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    private final int MAX_COMMENT_LEVEL = 5;
+    @Autowired
+    private CommentRatingRepository commentRatingRepository;
+
+    private static final int MAX_COMMENT_LEVEL = 5;
 
     @Override
     public Comment getComment(Long id) {
@@ -86,5 +87,30 @@ public class CommentServiceImpl implements CommentService {
         comment.setModifiedDateTime(LocalDateTime.now());
 
         commentRepository.saveAndFlush(comment);
+    }
+
+    @Override
+    public void vote(Long commentId, boolean like) throws AlreadyVotedException, ForbiddenException {
+        User currentUser = userService.currentUser();
+
+        Comment comment = getComment(commentId);
+
+        if (currentUser.getId().longValue() == comment.getUser().getId().longValue()) {
+            throw new ForbiddenException("cannot vote for own comments");
+        }
+
+        CommentRating rating = commentRatingRepository.findUserRating(commentId, currentUser.getId());
+
+        if (rating != null) {
+            throw new AlreadyVotedException("cannot vote more than once");
+        }
+
+        rating = new CommentRating();
+
+        rating.setUser(currentUser);
+        rating.setValue(like ? Rating.LIKE_VALUE : Rating.DISLIKE_VALUE);
+        rating.setComment(comment);
+
+        commentRatingRepository.saveAndFlush(rating);
     }
 }

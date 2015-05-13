@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "comments")
@@ -53,6 +54,10 @@ public class Comment {
     @OrderBy("dateTime ASC")
     private List<Comment> childrenComments = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
+
+    public List<CommentRating> commentRatings = new ArrayList<>();
+
     public int commentLevel() {
         Comment comment = this;
         int level = 0;
@@ -85,6 +90,18 @@ public class Comment {
 
     public long maxEditTimeUnixTimestamp() {
         return maxEditTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    public int getRatingSum() {
+        return commentRatings.stream().mapToInt(Rating::getValue).sum();
+    }
+
+    public short getUserVoteValue(Long userId) {
+        if (userId == null)
+            return 0;
+
+        Optional<CommentRating> rating = commentRatings.stream().filter(r -> r.getUser().getId().equals(userId)).findFirst();
+        return rating.isPresent() ? rating.get().getValue() : 0;
     }
 
     public Long getId() {
@@ -161,5 +178,13 @@ public class Comment {
 
     public void setChildrenComments(List<Comment> childrenComments) {
         this.childrenComments = childrenComments;
+    }
+
+    public List<CommentRating> getCommentRatings() {
+        return commentRatings;
+    }
+
+    public void setCommentRatings(List<CommentRating> commentRatings) {
+        this.commentRatings = commentRatings;
     }
 }

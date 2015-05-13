@@ -1,16 +1,17 @@
 package alexp.blog.service;
 
+import alexp.blog.controller.ForbiddenException;
 import alexp.blog.model.Comment;
+import alexp.blog.model.CommentRating;
 import alexp.blog.model.Post;
 import alexp.blog.model.User;
+import alexp.blog.repository.CommentRatingRepository;
 import alexp.blog.repository.CommentRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.*;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -26,6 +27,9 @@ public class CommentServiceTest {
 
     @Mock
     private CommentRepository commentRepository;
+
+    @Mock
+    private CommentRatingRepository commentRatingRepository;
 
     @InjectMocks
     private CommentServiceImpl commentService;
@@ -80,5 +84,74 @@ public class CommentServiceTest {
         assertThat(commentService.getComment(1L), is(equalTo(null)));
 
         verify(commentRepository, times(1)).findOne(Matchers.anyLong());
+    }
+
+    @Test
+    public void shouldVote() throws Exception {
+        Long commentId = 1L;
+
+        User user = new User();
+        user.setId(10L);
+
+        User anotherUser = new User();
+        anotherUser.setId(8L);
+
+        Comment comment = new Comment();
+        comment.setId(commentId);
+        comment.setUser(anotherUser);
+
+        when(commentRepository.findOne(commentId)).thenReturn(comment);
+
+        when(userService.currentUser()).thenReturn(user);
+
+        when(commentRatingRepository.findUserRating(commentId, user.getId())).thenReturn(null);
+
+        commentService.vote(commentId, true);
+
+        verify(commentRatingRepository, times(1)).findUserRating(commentId, user.getId());
+        verify(commentRatingRepository, times(1)).saveAndFlush(Matchers.any());
+    }
+
+    @Test(expected = AlreadyVotedException.class)
+    public void shouldThrowExceptionWhenAlreadyVoted() throws Exception {
+        Long commentId = 1L;
+
+        User user = new User();
+        user.setId(10L);
+
+        User anotherUser = new User();
+        anotherUser.setId(8L);
+
+        Comment comment = new Comment();
+        comment.setId(commentId);
+        comment.setUser(anotherUser);
+
+        when(commentRepository.findOne(commentId)).thenReturn(comment);
+
+        when(userService.currentUser()).thenReturn(user);
+
+        when(commentRatingRepository.findUserRating(commentId, user.getId())).thenReturn(new CommentRating());
+
+        commentService.vote(commentId, true);
+    }
+
+    @Test(expected = ForbiddenException.class)
+    public void shouldThrowExceptionWhenVoteForOwnComment() throws Exception {
+        Long commentId = 1L;
+
+        User user = new User();
+        user.setId(10L);
+
+        Comment comment = new Comment();
+        comment.setId(commentId);
+        comment.setUser(user);
+
+        when(commentRepository.findOne(commentId)).thenReturn(comment);
+
+        when(userService.currentUser()).thenReturn(user);
+
+        when(commentRatingRepository.findUserRating(commentId, user.getId())).thenReturn(new CommentRating());
+
+        commentService.vote(commentId, true);
     }
 }

@@ -2,10 +2,7 @@ package alexp.blog.controller;
 
 import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
-import alexp.blog.service.ActionExpiredException;
-import alexp.blog.service.CommentService;
-import alexp.blog.service.PostService;
-import alexp.blog.service.UserService;
+import alexp.blog.service.*;
 import alexp.blog.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -108,6 +105,36 @@ public class CommentController {
             throw new ResourceNotFoundException();
 
         return comment.getCommentText();
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/posts/{postId}/comments/{commentId}/like", method = RequestMethod.POST)
+    public @ResponseBody String like(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
+        try {
+            commentService.vote(commentId, true);
+        } catch (AlreadyVotedException e) {
+            return "already_voted";
+        }
+        catch (ForbiddenException e) {
+            return "own_comment";
+        }
+
+        return "ok";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/posts/{postId}/comments/{commentId}/dislike", method = RequestMethod.POST)
+    public @ResponseBody String dislike(@PathVariable("postId") Long postId, @PathVariable("commentId") Long commentId) {
+        try {
+            commentService.vote(commentId, false);
+        } catch (AlreadyVotedException e) {
+            return "already_voted";
+        }
+        catch (ForbiddenException e) {
+            return "own_comment";
+        }
+
+        return "ok";
     }
 
     private String makeCommentAddResponse(String status, String msg, Long id) {

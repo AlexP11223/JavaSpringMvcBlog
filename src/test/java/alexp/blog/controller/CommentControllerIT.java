@@ -237,4 +237,36 @@ public class CommentControllerIT extends AbstractIntegrationTest {
 
         assertThat(commentService.getComment(3L).getModifiedDateTime().toLocalDate().equals(LocalDate.now()), equalTo(true));
     }
+
+    @Test
+    @ExpectedDatabase("data-comments-voted.xml")
+    public void shouldVote() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/1/like").with(userBob()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+
+        mockMvc.perform(post("/posts/1/comments/2/dislike").with(userBob()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyVoteMoreThanOnce() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/2/like").with(userAlice()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("already_voted"));
+
+        mockMvc.perform(post("/posts/1/comments/2/dislike").with(userAlice()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("already_voted"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyVoteForOwnComment() throws Exception {
+        mockMvc.perform(post("/posts/1/comments/2/like").with(userAdmin()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("own_comment"));
+    }
 }

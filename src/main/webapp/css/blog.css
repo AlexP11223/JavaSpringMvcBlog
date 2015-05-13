@@ -300,3 +300,8 @@ label.error {
 .post-rating-block a {
     margin-right: 0;
 }
+
+.comment-rating-block {
+    display: inline-block;
+    float: right;
+}

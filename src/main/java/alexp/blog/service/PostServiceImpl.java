@@ -134,7 +134,7 @@ public class PostServiceImpl implements PostService
         rating = new PostRating();
 
         rating.setUser(currentUser);
-        rating.setValue((short) (like ? Rating.LIKE_VALUE : Rating.DISLIKE_VALUE));
+        rating.setValue(like ? Rating.LIKE_VALUE : Rating.DISLIKE_VALUE);
         rating.setPost(post);
 
         postRatingRepository.saveAndFlush(rating);
