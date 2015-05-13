@@ -116,6 +116,7 @@ label.error {
 }
 
 .post-actions {
+    margin-top: 10px;
 }
 
 .post-actions a {
@@ -252,4 +253,50 @@ label.error {
 
 #avatarUploadProgress {
     margin-top: 15px;
+}
+
+.rating-arrow, .rating-arrow:focus, .rating-arrow:hover {
+    text-decoration: none;
+}
+
+.rating-arrow span {
+    font-size: 18px;
+    color: #888888;
+    cursor: pointer;
+}
+
+.like-arrow:hover span, .like-arrow.voted span {
+    color: rgb(25, 189, 83);
+}
+
+.dislike-arrow:hover span, .dislike-arrow.voted span {
+    color: red;
+}
+
+.rating-value {
+    font-weight: bold;
+    font-size: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.rating-value-no {
+    color: #888;
+}
+
+.rating-value-positive {
+    color: rgb(25, 189, 83);
+}
+
+.rating-value-negative {
+    color: red;
+}
+
+.post-rating-block {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.post-rating-block a {
+    margin-right: 0;
 }

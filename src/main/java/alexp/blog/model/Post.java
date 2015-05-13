@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -48,6 +49,9 @@ public class Post {
     @OrderBy("dateTime ASC")
     public List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    public List<PostRating> postRatings = new ArrayList<>();
+
     public static String shortPartSeparator() {
         return "===cut===";
     }
@@ -66,6 +70,18 @@ public class Post {
 
     public List<Comment> topLevelComments() {
         return comments.stream().filter(c -> c.getParentComment() == null).collect(Collectors.toList());
+    }
+
+    public int getRatingSum() {
+        return postRatings.stream().mapToInt(Rating::getValue).sum();
+    }
+
+    public short getUserVoteValue(Long userId) {
+        if (userId == null)
+            return 0;
+
+        Optional<PostRating> rating = postRatings.stream().filter(r -> r.getUser().getId().equals(userId)).findFirst();
+        return rating.isPresent() ? rating.get().getValue() : 0;
     }
 
     public Long getId() {
@@ -130,5 +146,13 @@ public class Post {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public List<PostRating> getPostRatings() {
+        return postRatings;
+    }
+
+    public void setPostRatings(List<PostRating> postRatings) {
+        this.postRatings = postRatings;
     }
 }

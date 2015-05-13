@@ -25,4 +25,6 @@ public interface PostService {
     void setPostVisibility(Long postId, boolean hide);
 
     void deletePost(Long postId);
+
+    void vote(Long postId, boolean like) throws AlreadyVotedException;
 }

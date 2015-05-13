@@ -1,8 +1,7 @@
 package alexp.blog.service;
 
-import alexp.blog.model.Post;
-import alexp.blog.model.PostEditDto;
-import alexp.blog.model.Tag;
+import alexp.blog.model.*;
+import alexp.blog.repository.PostRatingRepository;
 import alexp.blog.repository.PostRepository;
 import alexp.blog.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,9 @@ public class PostServiceImpl implements PostService
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private PostRatingRepository postRatingRepository;
 
     @Autowired
     private UserService userService;
@@ -115,6 +117,27 @@ public class PostServiceImpl implements PostService
         postRepository.delete(post);
 
         postRepository.flush();
+    }
+
+    @Override
+    public void vote(Long postId, boolean like) throws AlreadyVotedException {
+        User currentUser = userService.currentUser();
+
+        Post post = getPost(postId);
+
+        PostRating rating = postRatingRepository.findUserRating(postId, currentUser.getId());
+
+        if (rating != null) {
+            throw new AlreadyVotedException("cannot vote more than once");
+        }
+
+        rating = new PostRating();
+
+        rating.setUser(currentUser);
+        rating.setValue((short) (like ? Rating.LIKE_VALUE : Rating.DISLIKE_VALUE));
+        rating.setPost(post);
+
+        postRatingRepository.saveAndFlush(rating);
     }
 
     private PostEditDto convertToPostEditDto(Post post) {

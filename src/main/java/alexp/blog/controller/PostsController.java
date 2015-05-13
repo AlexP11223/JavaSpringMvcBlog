@@ -3,6 +3,8 @@ package alexp.blog.controller;
 import alexp.blog.model.Comment;
 import alexp.blog.model.Post;
 import alexp.blog.model.PostEditDto;
+import alexp.blog.model.User;
+import alexp.blog.service.AlreadyVotedException;
 import alexp.blog.service.PostService;
 import alexp.blog.service.UserService;
 import alexp.blog.utils.JsonUtils;
@@ -35,6 +37,11 @@ public class PostsController {
 
         model.addAttribute("postsPage", postsPage);
 
+        // should implement custom Spring Security  UserDetails instead of this, so it will be stored in session
+        User currentUser = userService.currentUser();
+        if (currentUser != null)
+            model.addAttribute("userId", currentUser.getId());
+
         return "posts";
     }
 
@@ -63,6 +70,11 @@ public class PostsController {
         String query = "tagged=" + request.getParameter("tagged");
         model.addAttribute("searchQuery", query);
 
+        // should implement custom Spring Security  UserDetails instead of this, so it will be stored in session
+        User currentUser = userService.currentUser();
+        if (currentUser != null)
+            model.addAttribute("userId", currentUser.getId());
+
         return "posts";
     }
 
@@ -81,6 +93,11 @@ public class PostsController {
         if (userService.isAuthenticated()) {
             model.addAttribute("comment", new Comment());
         }
+
+        // should implement custom Spring Security  UserDetails instead of this, so it will be stored in session
+        User currentUser = userService.currentUser();
+        if (currentUser != null)
+            model.addAttribute("userId", currentUser.getId());
 
         return "post";
     }
@@ -167,5 +184,29 @@ public class PostsController {
 
     private String toJsonLink(Post post) {
         return "{" + JsonUtils.toJsonField("id", post.getId().toString()) + ", " + JsonUtils.toJsonField("title", post.getTitle()) + "}";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/posts/{postId}/like", method = RequestMethod.POST)
+    public @ResponseBody String like(@PathVariable("postId") Long postId) {
+        try {
+            postService.vote(postId, true);
+        } catch (AlreadyVotedException e) {
+            return "already_voted";
+        }
+
+        return "ok";
+    }
+
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @RequestMapping(value = "/posts/{postId}/dislike", method = RequestMethod.POST)
+    public @ResponseBody String dislike(@PathVariable("postId") Long postId) {
+        try {
+            postService.vote(postId, false);
+        } catch (AlreadyVotedException e) {
+            return "already_voted";
+        }
+
+        return "ok";
     }
 }

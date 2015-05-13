@@ -1,8 +1,7 @@
 package alexp.blog.service;
 
-import alexp.blog.model.Post;
-import alexp.blog.model.PostEditDto;
-import alexp.blog.model.Tag;
+import alexp.blog.model.*;
+import alexp.blog.repository.PostRatingRepository;
 import alexp.blog.repository.PostRepository;
 import alexp.blog.repository.TagRepository;
 import org.hamcrest.CoreMatchers;
@@ -38,6 +37,9 @@ public class PostServiceTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private PostRatingRepository postRatingRepository;
 
     @InjectMocks
     private PostServiceImpl postService;
@@ -305,4 +307,37 @@ public class PostServiceTest {
 
         verify(postRepository, times(1)).delete(post);
     }
+
+    @Test
+    public void shouldVote() throws Exception {
+        Long postId = 1L;
+
+        User user = new User();
+        user.setId(10L);
+
+        when(userService.currentUser()).thenReturn(user);
+
+        when(postRatingRepository.findUserRating(postId, user.getId())).thenReturn(null);
+
+        postService.vote(postId, true);
+
+        verify(postRatingRepository, times(1)).findUserRating(postId, user.getId());
+        verify(postRatingRepository, times(1)).saveAndFlush(Matchers.any());
+    }
+
+    @Test(expected = AlreadyVotedException.class)
+    public void shouldThrowExceptionWhenAlreadyVoted() throws Exception {
+        Long postId = 1L;
+
+        User user = new User();
+        user.setId(10L);
+
+        when(userService.currentUser()).thenReturn(user);
+
+        when(postRatingRepository.findUserRating(postId, user.getId())).thenReturn(new PostRating());
+
+        postService.vote(postId, true);
+    }
+
+
 }

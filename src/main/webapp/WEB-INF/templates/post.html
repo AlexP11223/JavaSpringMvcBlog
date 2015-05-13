@@ -18,11 +18,12 @@
 
     <script src="../../js/comments.js" th:src="@{/js/comments.js}"></script>
     <script sec:authorize="hasRole('ROLE_ADMIN')" src="../../js/admin.js" th:src="@{/js/admin.js}"></script>
+    <script src="../../js/voting.js" th:src="@{/js/voting.js}"></script>
 </head>
 
 <body>
 
-<section layout:fragment="content">
+<section layout:fragment="content" th:with="isUser=${#authorization.expression('hasRole(''ROLE_USER'')')}">
 
     <script th:inline="javascript">
         window.commentsReloadUrl = /*[[@{|/posts/${post.id}/comments|}]]*/ '';
@@ -47,6 +48,24 @@
             </div>
 
             <div class="post-actions">
+                <div class="post-rating-block" th:title="${isUser} ? '' : 'Log in or register to vote'"
+                     th:with="ratingSum=${post.getRatingSum()}, userVoteValue=${post.getUserVoteValue(userId)}">
+                    <a class=" rating-arrow like-arrow" href="javascript:void(0)"
+                       th:attr="data-action=${isUser and userVoteValue == 0} ? 'vote' : '', data-href=@{|/posts/${post.id}/like|}"
+                       th:classappend="${userVoteValue == 1} ? 'voted'"
+                       data-vote-type="like">
+                        <span class="glyphicon glyphicon-arrow-up"></span>
+                    </a>
+                    <span class="rating-value" th:text="${ratingSum}"
+                          th:classappend="${ratingSum == 0} ? 'rating-value-no' : (${ratingSum lt 0} ? 'rating-value-negative' : 'rating-value-positive')"></span>
+                    <a class="rating-arrow dislike-arrow" href="javascript:void(0)"
+                       th:attr="data-action=${isUser and userVoteValue == 0} ? 'vote' : '', data-href=@{|/posts/${post.id}/dislike|}"
+                       th:classappend="${userVoteValue == -1} ? 'voted'"
+                       data-vote-type="dislike">
+                        <span class="glyphicon glyphicon-arrow-down"></span>
+                    </a>
+                </div>
+
                 <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{|/posts/${post.id}/edit|}">edit</a>
 
                 <a sec:authorize="hasRole('ROLE_ADMIN')" href="javascript:void(0)"

@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.http.MediaType;
 
 import static alexp.blog.utils.SecurityUtils.userAdmin;
+import static alexp.blog.utils.SecurityUtils.userAlice;
 import static alexp.blog.utils.SecurityUtils.userBob;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -379,5 +380,29 @@ public class PostsControllerIT extends AbstractIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("posts"))
                 .andExpect(model().attribute("postsPage", hasProperty("totalElements", equalTo(2L))));
+    }
+
+    @Test
+    @ExpectedDatabase("data-posts-voted.xml")
+    public void shouldVote() throws Exception {
+        mockMvc.perform(post("/posts/1/like").with(userBob()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+
+        mockMvc.perform(post("/posts/2/dislike").with(userBob()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("ok"));
+    }
+
+    @Test
+    @ExpectedDatabase("data.xml")
+    public void shouldDenyVoteMoreThanOnce() throws Exception {
+        mockMvc.perform(post("/posts/1/like").with(userAlice()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("already_voted"));
+
+        mockMvc.perform(post("/posts/1/dislike").with(userAlice()).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("already_voted"));
     }
 }

@@ -9,6 +9,7 @@
 
 <head>
     <script sec:authorize="hasRole('ROLE_ADMIN')" src="../../js/admin.js" th:src="@{/js/admin.js}"></script>
+    <script src="../../js/voting.js" th:src="@{/js/voting.js}"></script>
 </head>
 
 <body>
@@ -24,7 +25,7 @@
         </div>
     </div>
 
-    <div id="postsContainer">
+    <div id="postsContainer" th:with="isUser=${#authorization.expression('hasRole(''ROLE_USER'')')}">
         <div th:attr="data-post-id=${post.id}, data-post-title=${post.title}" class="post" th:each="post, iterStat : ${postsPage.getContent()}">
             <div class="post-content">
                 <a class="h2 post-title" th:text="${post.title}" th:href="@{|/posts/${post.id}|}"></a>
@@ -46,6 +47,24 @@
             </div>
 
             <div class="post-actions">
+                <div class="post-rating-block" th:title="${isUser} ? '' : 'Log in or register to vote'"
+                        th:with="ratingSum=${post.getRatingSum()}, userVoteValue=${post.getUserVoteValue(userId)}">
+                    <a class=" rating-arrow like-arrow" href="javascript:void(0)"
+                       th:attr="data-action=${isUser and userVoteValue == 0} ? 'vote' : '', data-href=@{|/posts/${post.id}/like|}"
+                       th:classappend="${userVoteValue == 1} ? 'voted'"
+                       data-vote-type="like">
+                        <span class="glyphicon glyphicon-arrow-up"></span>
+                    </a>
+                    <span class="rating-value" th:text="${ratingSum}"
+                          th:classappend="${ratingSum == 0} ? 'rating-value-no' : (${ratingSum lt 0} ? 'rating-value-negative' : 'rating-value-positive')"></span>
+                    <a class="rating-arrow dislike-arrow" href="javascript:void(0)"
+                       th:attr="data-action=${isUser and userVoteValue == 0} ? 'vote' : '', data-href=@{|/posts/${post.id}/dislike|}"
+                       th:classappend="${userVoteValue == -1} ? 'voted'"
+                       data-vote-type="dislike">
+                        <span class="glyphicon glyphicon-arrow-down"></span>
+                    </a>
+                </div>
+
                 <a class="comments-link" th:href="@{|/posts/${post.id}#comments|}"
                    th:text="${post.comments.size() == 0} ? 'comments' : (${post.comments.size()} + ' comment' + (${post.comments.size() &gt; 1} ? 's' : ''))"></a>
 

@@ -23,6 +23,8 @@
 
     <comments/>
 
+    <post_ratings />
+
     <persistent_logins/>
 
 </dataset>

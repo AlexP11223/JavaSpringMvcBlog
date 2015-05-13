@@ -42,4 +42,31 @@ public class PostTest {
 
         assertThat(comments.size(), equalTo(0));
     }
+
+    @Test
+    public void testRatingSum() {
+        assertThat(post.getRatingSum(), equalTo(0));
+
+        post.getPostRatings().add(new PostRating(null, Rating.LIKE_VALUE, null));
+
+        assertThat(post.getRatingSum(), equalTo(1));
+
+        post.getPostRatings().add(new PostRating(null, Rating.DISLIKE_VALUE, null));
+        post.getPostRatings().add(new PostRating(null, Rating.DISLIKE_VALUE, null));
+
+        assertThat(post.getRatingSum(), equalTo(-1));
+    }
+
+    @Test
+    public void testUserVoteValue() {
+        assertThat(post.getUserVoteValue(null), equalTo((short) 0));
+        assertThat(post.getUserVoteValue(1L), equalTo((short) 0));
+
+        User user = new User();
+        user.setId(1L);
+
+        post.getPostRatings().add(new PostRating(user, Rating.LIKE_VALUE, null));
+
+        assertThat(post.getUserVoteValue(user.getId()), equalTo(Rating.LIKE_VALUE));
+    }
 }
