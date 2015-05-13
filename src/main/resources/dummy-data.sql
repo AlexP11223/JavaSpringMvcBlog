@@ -1708,3 +1708,110 @@ INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, paren
 INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(11, 'And cat language!', '2015-04-09 13:30:58', 85, 2, 0, 6);
 
 INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(12, '**VRASUBATBURUK UG BUTHARUBATGRUIUK!!!**', '2015-05-09 12:30:58', 85, 8, 1, 2);
+
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 1, 1);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 1, 2);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 5, 2);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 6, 2);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 3, 3);
+
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 3, 7);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 5, 7);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 6, 7);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 7, 7);
+
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 3, 8);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 4, 8);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 5, 8);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 6, 8);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 7, 8);
+
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 2, 9);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 3, 9);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 4, 9);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 6, 9);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 7, 9);
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(1, 8, 9);
+
+INSERT INTO comment_ratings(value, user_id, comment_id) VALUES(-1, 5, 10);
+
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 2, 83);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 3, 83);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 4, 83);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 2, 85);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 3, 85);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 85);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 2, 84);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 3, 84);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 4, 84);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 84);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 84);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 84);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 8, 84);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 4, 82);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 82);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 82);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 82);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 82);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 2, 80);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 3, 80);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 4, 80);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 80);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 80);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 2, 79);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 3, 79);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 4, 79);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 5, 79);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 79);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 79);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 79);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 2, 78);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 78);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 78);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 78);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 2, 77);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 3, 77);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 4, 77);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 77);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 77);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 77);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 77);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 4, 76);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 76);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 76);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 76);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 76);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 75);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 75);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 75);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 75);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 4, 74);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 74);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 74);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 74);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 74);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(-1, 4, 73);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 73);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 73);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 73);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 73);
+
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 2, 42);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 3, 42);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 4, 42);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 5, 42);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 6, 42);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 7, 42);
+INSERT INTO post_ratings(value, user_id, post_id) VALUES(1, 8, 42);
