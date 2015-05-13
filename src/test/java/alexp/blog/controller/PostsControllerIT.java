@@ -37,7 +37,7 @@ public class PostsControllerIT extends AbstractIntegrationTest {
     }
 
     @Test
-    @ExpectedDatabase("data.xml")
+    @DatabaseSetup("data.xml")
     public void shouldGetPostsList() throws Exception {
         mockMvc.perform(get("/posts").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -46,6 +46,20 @@ public class PostsControllerIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$[0].title", is("meow title")))
                 .andExpect(jsonPath("$[1].id", is("1")))
                 .andExpect(jsonPath("$[1].title", is("hello title")));
+    }
+
+    @Test
+    @ExpectedDatabase("data-posts-voted.xml")
+    @DatabaseSetup("data-posts-voted.xml")
+    @DatabaseTearDown(value = "data.xml", type = DatabaseOperation.TRUNCATE_TABLE) // to reset id sequence, otherwise other tests that insert and check id will fail on ExpectedDatabase
+    public void shouldGetTopPostsList() throws Exception {
+        mockMvc.perform(get("/posts/top").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is("1")))
+                .andExpect(jsonPath("$[0].title", is("hello title")))
+                .andExpect(jsonPath("$[1].id", is("2")))
+                .andExpect(jsonPath("$[1].title", is("meow title")));
     }
 
     @Test

@@ -43,6 +43,7 @@
 
 <script th:inline="javascript">
     window.postsUrl = /*[[@{/posts}]]*/ '';
+    window.popularPostsUrl = /*[[@{/posts/top}]]*/ '';
 </script>
 
 <div class="container-fluid">
@@ -122,6 +123,14 @@
                 <div id="latestPosts" class="panel panel-default">
                     <div class="panel-body">
                         <h4>Latest posts</h4>
+
+
+                    </div>
+                </div>
+
+                <div id="popularPosts" class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Popular posts</h4>
 
 
                     </div>

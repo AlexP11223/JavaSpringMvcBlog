@@ -52,6 +52,13 @@ public class PostsController {
         return "[" + posts.stream().map(this::toJsonLink).collect(Collectors.joining(", \n")) + "]";
     }
 
+    @RequestMapping(value = {"/posts/top"}, method = RequestMethod.GET, headers="Accept=application/json")
+    public @ResponseBody String getTopPostsList() {
+        List<Post> posts = postService.getTopPostsList();
+
+        return "[" + posts.stream().map(this::toJsonLink).collect(Collectors.joining(", \n")) + "]";
+    }
+
     @RequestMapping(value = "/posts", method = RequestMethod.GET, params = {"tagged"})
     public String searchByTag(@RequestParam("tagged") String tagsStr, @RequestParam(value = "page", defaultValue = "0") Integer pageNumber,
                               ModelMap model, HttpServletRequest request) {
