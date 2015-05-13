@@ -25,7 +25,7 @@
     <posts_tags post_id="2" tag_id="3"/>
 
     <comments id="1" post_id="1" user_id="2" commentText="comment1 text" deleted="0"/>
-    <comments id="2" post_id="1" user_id="1" commentText="comment2 text" deleted="0" parent_id="1"/>
+    <comments id="2" post_id="1" user_id="1" commentText="comment2 text" deleted="0" parent_id="1" modifiedDateTime="2015-04-01 15:40:00"/>
     <comments id="3" post_id="1" user_id="2" commentText="comment3 text" deleted="0"/>
     <comments id="4" post_id="1" user_id="3" commentText="new comment text" deleted="0"/>
 

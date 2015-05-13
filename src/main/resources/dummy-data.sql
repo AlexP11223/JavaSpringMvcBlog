@@ -1695,7 +1695,7 @@ INSERT INTO posts_tags(post_id, tag_id) VALUES (85, 5);
 
 
 INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted) VALUES(1, 'Great post! Keep it up!', '2015-04-03 14:30:58', 85, 2, 0);
-INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted) VALUES(2, 'Yeah, I learnt **so much** here.', '2015-04-03 16:35:58', 85, 3, 0);
+INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, modifiedDateTime) VALUES(2, 'Yeah, I learnt **so much** here.', '2015-04-03 16:35:58', 85, 3, 0, '2015-04-03 19:30:58');
 INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(3, 'Thank you.:)', '2015-04-03 19:00:58', 85, 1, 0, 2);
 INSERT INTO comments(id, commentText, dateTime, post_id, user_id, deleted, parent_id) VALUES(4, 'OK!', '2015-04-03 19:10:58', 85, 1, 0, 1);
 

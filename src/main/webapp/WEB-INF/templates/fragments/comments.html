@@ -22,7 +22,10 @@
                     </th:block>
                     <span th:if="${comment.deleted}" class="deleted">[deleted]</span>
 
-                    <span class="post-date" th:text="${#temporals.format(comment.dateTime, 'MMM dd, yyyy HH:mm')}"></span>
+                    <span class="post-date">
+                        <span th:text="${#temporals.format(comment.dateTime, 'MMM dd, yyyy HH:mm')}"></span>
+                        <i th:unless="${comment.modifiedDateTime == null}" th:text="' (modified ' + ${#temporals.format(comment.modifiedDateTime, 'MMM dd, yyyy HH:mm')} + ')'"></i>
+                    </span>
                 </div>
 
                 <div>

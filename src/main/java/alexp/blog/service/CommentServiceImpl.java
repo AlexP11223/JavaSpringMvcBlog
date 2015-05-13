@@ -83,6 +83,8 @@ public class CommentServiceImpl implements CommentService {
 
         comment.setCommentText(newCommentData.getCommentText());
 
+        comment.setModifiedDateTime(LocalDateTime.now());
+
         commentRepository.saveAndFlush(comment);
     }
 }

@@ -27,6 +27,10 @@ public class Comment {
     @Convert(converter = LocalDateTimePersistenceConverter.class)
     private LocalDateTime dateTime;
 
+    @Column(nullable = true)
+    @Convert(converter = LocalDateTimePersistenceConverter.class)
+    private LocalDateTime modifiedDateTime;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -105,6 +109,14 @@ public class Comment {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public LocalDateTime getModifiedDateTime() {
+        return modifiedDateTime;
+    }
+
+    public void setModifiedDateTime(LocalDateTime modifiedDateTime) {
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     public void setCommentText(String commentText) {

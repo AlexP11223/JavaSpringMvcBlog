@@ -1,13 +1,18 @@
 package alexp.blog.controller;
 
 import alexp.blog.AbstractIntegrationTest;
+import alexp.blog.service.CommentService;
 import alexp.blog.utils.HsqldbSequenceResetter;
 import com.github.springtestdbunit.annotation.*;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import java.time.LocalDate;
+
 import static alexp.blog.utils.SecurityUtils.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -17,6 +22,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DatabaseSetup("data.xml")
 @DbUnitConfiguration(databaseOperationLookup = HsqldbSequenceResetter.class)
 public class CommentControllerIT extends AbstractIntegrationTest {
+
+    @Autowired
+    private CommentService commentService;
 
     @Test
     @ExpectedDatabase("data.xml")
@@ -212,10 +220,12 @@ public class CommentControllerIT extends AbstractIntegrationTest {
                 .param("commentText", text))
                 .andExpect(status().isOk())
                 .andExpect(content().string("ok"));
+
+        assertThat(commentService.getComment(4L).getModifiedDateTime().toLocalDate().equals(LocalDate.now()), equalTo(true));
     }
 
     @Test
-    @ExpectedDatabase("data-comment-edited.xml")
+    @ExpectedDatabase(value = "data-comment-edited.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
     public void shouldAllowEditedAnyCommentIfAdmin() throws Exception {
         String text = "edited text";
 
@@ -224,5 +234,7 @@ public class CommentControllerIT extends AbstractIntegrationTest {
                 .param("commentText", text))
                 .andExpect(status().isOk())
                 .andExpect(content().string("ok"));
+
+        assertThat(commentService.getComment(3L).getModifiedDateTime().toLocalDate().equals(LocalDate.now()), equalTo(true));
     }
 }
