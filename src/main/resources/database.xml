@@ -26,9 +26,14 @@
 
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <beans profile="dev,prod">
-        <import resource="classpath:/datasource-dev.xml"/>
-    </beans>
+	<beans profile="dev">
+		<import resource="classpath:/datasource-dev.xml"/>
+	</beans>
+
+	<beans profile="prod">
+		<import resource="classpath:/datasource-dev.xml"/>
+		<!--<import resource="classpath:/datasource-prod.xml"/>-->
+	</beans>
 
     <beans profile="test">
         <import resource="classpath:/datasource-test.xml"/>
