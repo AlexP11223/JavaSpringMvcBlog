@@ -47,10 +47,10 @@ public class Post {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
     @org.hibernate.annotations.LazyCollection(org.hibernate.annotations.LazyCollectionOption.EXTRA)
     @OrderBy("dateTime ASC")
-    public List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
-    public List<PostRating> postRatings = new ArrayList<>();
+    private List<PostRating> postRatings = new ArrayList<>();
 
     public static String shortPartSeparator() {
         return "===cut===";

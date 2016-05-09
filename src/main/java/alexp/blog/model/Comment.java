@@ -56,7 +56,7 @@ public class Comment {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "comment")
 
-    public List<CommentRating> commentRatings = new ArrayList<>();
+    private List<CommentRating> commentRatings = new ArrayList<>();
 
     public int commentLevel() {
         Comment comment = this;

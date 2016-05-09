@@ -86,7 +86,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeEmail(String newEmail, String currentPassword) throws AuthException {
         User user = currentUser();
-        System.out.println(user.bigAvatarLink);
         if (!passwordEncoder.matches(currentPassword, user.getPassword()))
             throw new AuthException("password does not match");
 

@@ -65,22 +65,22 @@ public class User {
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-    public List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(nullable = true, length = 1000)
     @Size(max = 1000, groups = {ProfileInfoValidationGroup.class})
-    public String aboutText;
+    private String aboutText;
 
     @Column(nullable = true, length = 80)
     @Pattern(regexp = "^\\s*(https?:\\/\\/.+)?", groups = {ProfileInfoValidationGroup.class})
     @Size(max = 80, groups = {ProfileInfoValidationGroup.class})
-    public String websiteLink;
+    private String websiteLink;
 
     @Column(nullable = true)
-    public String smallAvatarLink;
+    private String smallAvatarLink;
 
     @Column(nullable = true)
-    public String bigAvatarLink;
+    private String bigAvatarLink;
 
     public Long getId() {
         return Id;
