@@ -45,14 +45,14 @@ public class PostsController {
         return "posts";
     }
 
-    @RequestMapping(value = {"/posts"}, method = RequestMethod.GET, headers="Accept=application/json")
+    @RequestMapping(value = {"/posts"}, method = RequestMethod.GET, headers="Accept=application/json", produces = "application/json;charset=UTF-8")
     public @ResponseBody String getPostsList(@RequestParam(value = "page", defaultValue = "0") Integer pageNumber) {
         List<Post> posts = postService.getPostsList(pageNumber, 10);
 
         return "[" + posts.stream().map(this::toJsonLink).collect(Collectors.joining(", \n")) + "]";
     }
 
-    @RequestMapping(value = {"/posts/top"}, method = RequestMethod.GET, headers="Accept=application/json")
+    @RequestMapping(value = {"/posts/top"}, method = RequestMethod.GET, headers="Accept=application/json", produces = "application/json;charset=UTF-8")
     public @ResponseBody String getTopPostsList() {
         List<Post> posts = postService.getTopPostsList();
 
