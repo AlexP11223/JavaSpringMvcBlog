@@ -53,7 +53,7 @@
 }
 
 .wmd-button > span {
-    background-image: url(../js/wmd-buttons.png);
+    background-image: url(../../js/wmd-buttons.png);
     background-repeat: no-repeat;
     background-position: 0 0;
     width: 20px;

@@ -10,11 +10,11 @@
 <head>
     <title th:text="'Blog — ' + ${post.title}"></title>
 
-    <script src="../../js/Markdown.Converter.js" th:src="@{/js/Markdown.Converter.js}"></script>
-    <script src="../../js/Markdown.Sanitizer.js" th:src="@{/js/Markdown.Sanitizer.js}"></script>
-    <script src="../../js/Markdown.Editor.js" th:src="@{/js/Markdown.Editor.js}"></script>
+    <script src="../../js/external/markdown/Markdown.Converter.js" th:src="@{/js/external/markdown/Markdown.Converter.js}"></script>
+    <script src="../../js/external/markdown/Markdown.Sanitizer.js" th:src="@{/js/external/markdown/Markdown.Sanitizer.js}"></script>
+    <script src="../../js/external/markdown/Markdown.Editor.js" th:src="@{/js/external/markdown/Markdown.Editor.js}"></script>
 
-    <link rel="stylesheet" type="text/css" href="../../css/pagedown.css" th:href="@{/css/pagedown.css}"/>
+    <link rel="stylesheet" type="text/css" href="../../css/external/pagedown.css" th:href="@{/css/external/pagedown.css}"/>
 
     <script src="../../js/comments.js" th:src="@{/js/comments.js}"></script>
     <script sec:authorize="hasRole('ROLE_ADMIN')" src="../../js/admin.js" th:src="@{/js/admin.js}"></script>
