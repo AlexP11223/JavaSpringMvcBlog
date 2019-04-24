@@ -4,7 +4,6 @@ Username/password auth, admin can add/edit/delete blog posts, users (after regis
 
 Can be useful for someone who is learning the techonologies/frameworks used here.
 
-The project is deployed here http://109.120.169.99:8080/blog, admin username/password — admin/pass123, the same password for other users, Alice/Bob/User1-5.
 
 - Spring MVC, Spring Security. Spring profiles.
 - Hibernate, MySQL database.
